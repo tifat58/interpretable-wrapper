@@ -1,0 +1,39 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+*.joblib
+*.pkl
+
+# Conda
+.conda/
+
+# Node
+frontend/node_modules/
+frontend/.vite/
+
+# Logs
+logs/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Model weights & data (large files — download on server)
+backend/models/weights/
+backend/data/vectordb/
+backend/data/medical/
+backend/data/toxicity/
+backend/data/vision/
+
+# Word temp files
+~$*.docx
+
+# Environment
+.env
