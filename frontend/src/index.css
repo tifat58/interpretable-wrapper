@@ -1,3 +1,109 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* ── Fade-in animation ─────────────────────────────── */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.animate-fade-in {
+  animation: fadeInUp 0.4s ease-out both;
+}
+
+/* ── Custom range slider styling ───────────────────── */
+input[type="range"].slider-styled::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #4f46e5;
+  border: 2px solid white;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.25);
+  cursor: pointer;
+  margin-top: -5px;
+}
+input[type="range"].slider-styled::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #4f46e5;
+  border: 2px solid white;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.25);
+  cursor: pointer;
+}
+input[type="range"].slider-styled::-webkit-slider-runnable-track {
+  height: 8px;
+  border-radius: 4px;
+  background: linear-gradient(to right, #e0e7ff, #818cf8);
+}
+input[type="range"].slider-styled::-moz-range-track {
+  height: 8px;
+  border-radius: 4px;
+  background: linear-gradient(to right, #e0e7ff, #818cf8);
+}
+
+/* ── Styled scrollbar ──────────────────────────────── */
+.styled-scrollbar::-webkit-scrollbar {
+  width: 5px;
+}
+.styled-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.styled-scrollbar::-webkit-scrollbar-thumb {
+  background: #c7d2fe;
+  border-radius: 9999px;
+}
+.styled-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #a5b4fc;
+}
+
+/* ── Glass card ────────────────────────────────────── */
+.glass-card {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+/* ── Dot pattern background ────────────────────────── */
+.dot-bg {
+  background-image: radial-gradient(circle, #e0e7ff 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+/* ── Sidebar panel overrides (compact for narrow sidebar) ── */
+.sidebar-panels > div {
+  font-size: 0.85rem;
+}
+.sidebar-panels h3 {
+  font-size: 0.8rem;
+}
+
+/* ── Scroll shadow hint for sticky sidebar ──────────── */
+.sidebar-panels {
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0,
+    black 8px,
+    black calc(100% - 8px),
+    transparent 100%
+  );
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 0,
+    black 8px,
+    black calc(100% - 8px),
+    transparent 100%
+  );
+}
+
+/* ── Comparison bar entrance animation ──────────────── */
+@keyframes slideInRight {
+  from { opacity: 0; transform: translateX(24px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+.animate-slide-in {
+  animation: slideInRight 0.35s ease-out both;
+}
