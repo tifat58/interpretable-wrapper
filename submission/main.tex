@@ -1,0 +1,295 @@
+%% For submission and review of your manuscript please change the
+%% command to \documentclass[manuscript, screen, review]{acmart}.
+%%
+%% When submitting camera ready or to TAPS, please change the command
+%% to \documentclass[sigconf]{acmart} or whichever template is required
+%% for your publication.
+%%
+%%
+\documentclass[sigconf,review,screen]{acmart}
+%%
+%% \BibTeX command to typeset BibTeX logo in the docs
+\AtBeginDocument{%
+  \providecommand\BibTeX{{%
+    Bib\TeX}}}
+
+%% Rights management information.  This information is sent to you
+%% when you complete the rights form.  These commands have SAMPLE
+%% values in them; it is your responsibility as an author to replace
+%% the commands and values with those provided to you when you
+%% complete the rights form.
+\setcopyright{acmlicensed}
+\copyrightyear{2018}
+\acmYear{2018}
+\acmDOI{XXXXXXX.XXXXXXX}
+%% These commands are for a PROCEEDINGS abstract or paper.
+\acmConference[Conference acronym 'XX]{Make sure to enter the correct
+  conference title from your rights confirmation email}{June 03--05,
+  2018}{Woodstock, NY}
+%%
+%%  Uncomment \acmBooktitle if the title of the proceedings is different
+%%  from ``Proceedings of ...''!
+%%
+%%\acmBooktitle{Woodstock '18: ACM Symposium on Neural Gaze Detection,
+%%  June 03--05, 2018, Woodstock, NY}
+\acmISBN{978-1-4503-XXXX-X/2018/06}
+
+
+
+\begin{document}
+
+
+\title{Interactive Concept Bottleneck Wrappers for Black-Box Models}
+
+
+\author{Hasan Md Tusfiqur Alam}
+\email{hasan.alam@dfki.de}
+\orcid{0000-0003-1479-7690}
+\affiliation{
+  \institution{German Research Center for Artificial Intelligence (DFKI)}
+  \city{Saarbrücken}
+  \country{Germany}
+}
+
+\author{Abdulrahman Mohamed Selim}
+\email{abdulrahman.mohamed@dfki.de}
+\orcid{0000-0002-4984-6686}
+\affiliation{
+  \institution{German Research Center for Artificial Intelligence (DFKI)}
+  \city{Saarbrücken}
+  \country{Germany}
+}
+\affiliation{
+  \institution{University of Oldenburg}
+  \city{Oldenburg}
+  \country{Germany}
+} 
+
+\author{L\'{a}szl\'{o} Kop\'{a}csi}
+\email{laszlo.kopacsi@dfki.de}
+\orcid{0000-0003-2387-2015}
+\affiliation{
+  \institution{German Research Center for Artificial Intelligence (DFKI)}
+  \city{Saarbrücken}
+  \country{Germany}
+}
+
+\author{Daniel Sonntag}
+\orcid{0000-0002-8857-8709}
+\email{daniel.sonntag@dfki.de}
+\affiliation{
+  \institution{German Research Center for Artificial Intelligence (DFKI)}
+  \city{Saarbrücken}
+  \country{Germany}
+}
+\affiliation{
+  \institution{University of Oldenburg}
+  \city{Oldenburg}
+  \country{Germany}
+} 
+
+\renewcommand{\shortauthors}{Alam et al.}
+
+%%
+%% The abstract is a short summary of the work to be presented in the
+%% article.
+\begin{abstract}
+%   Over the last few years, interest in interpretable and explainable AI has grown. However, many deployed models still prioritize predictive performance over transparency. Therefore, in this demo, we present an interactive system that adds concept-level interpretability post hoc to pretrained black-box classifiers without modifying their architectures.
+% This provides a practical way to inspect and test model behavior while keeping the original predictor fixed. 
+% The system wraps the predictor with a concept bottleneck; it extracts intermediate representations, maps them to human-interpretable concept activations using multiple strategies, and fits an interpretable surrogate in concept space to approximate local model behavior. 
+% Users (e.g., domain experts) can inspect concept activations, view concept-specific evidence, run what-if interventions and counterfactual comparisons, and obtain evidence-grounded textual explanations using retrieval-augmented generation (RAG). 
+% Overall, we designed the system as a general-purpose wrapper that can be extended to new tasks and data distributions, but in this demo, we showcase it on three tasks: chest X-ray classification, bird species classification, and toxic comment detection.
+    Over the last few years, interest in interpretable and explainable AI has grown. However, many deployed models still prioritize predictive performance over transparency. In this demo, we present an interactive multimodal interface that adds concept-level interpretability post hoc to pretrained black-box classifiers without modifying their architectures. This provides a practical way to inspect and test model behavior while keeping the original predictor fixed. The system builds a concept bottleneck around the predictor; it extracts intermediate representations, maps them to human-interpretable concept activations using multiple strategies, and fits an interpretable local approximation in concept space to model behavior. The multimodal interaction design combines visual evidence views (e.g., heatmaps), textual evidence snippets, direct concept manipulation (sliders for what-if and counterfactual analysis), and conversational querying. We designed the system as a general-purpose framework that can be extended to new tasks and data distributions, and in this demo we showcase it on three tasks: chest X-ray classification, bird species classification, and toxic comment detection.  
+\end{abstract}
+
+%%
+%% The code below is generated by the tool at http://dl.acm.org/ccs.cfm.
+%% Please copy and paste the code instead of the example below.
+%%
+\begin{CCSXML}
+<ccs2012>
+   <concept>
+       <concept_id>10010147.10010178.10010179.10003352</concept_id>
+       <concept_desc>Computing methodologies~Information extraction</concept_desc>
+       <concept_significance>500</concept_significance>
+       </concept>
+   <concept>
+       <concept_id>10003120.10003145.10003146.10010891</concept_id>
+       <concept_desc>Human-centered computing~Heat maps</concept_desc>
+       <concept_significance>300</concept_significance>
+       </concept>
+   <concept>
+       <concept_id>10002951.10003317.10003371.10003386</concept_id>
+       <concept_desc>Information systems~Multimedia and multimodal retrieval</concept_desc>
+       <concept_significance>300</concept_significance>
+       </concept>
+ </ccs2012>
+\end{CCSXML}
+
+\ccsdesc[500]{Computing methodologies~Information extraction}
+\ccsdesc[300]{Human-centered computing~Heat maps}
+\ccsdesc[300]{Information systems~Multimedia and multimodal retrieval}
+
+
+\begin{teaserfigure}
+    \centering
+    \includegraphics[width=\textwidth]{demov2.png}
+    \caption{Overview of the demonstration workflow: (1) select task, input, and black-box model; (2) construct a concept representation using a chosen strategy; (3) fit a local surrogate in concept space and report fidelity; (4) interact via concept interventions and counterfactuals; (5) generate evidence-grounded explanations via RAG.}
+    \Description{A figure giving an overview of the demo user interface.}
+    \label{fig:workflow}
+\end{teaserfigure}
+
+ \maketitle
+
+
+\section{Introduction}
+Effective human-AI collaboration requires interfaces that convert model outputs into understandable feedback. 
+While deep neural networks are optimized for strong predictive performance, their decisions often remain difficult to interpret in deployment. Post-hoc explainers (e.g., LIME~\cite{Ribeiro2016LIME} and SHAP~\cite{Lundberg2017SHAP}) approximate local model behavior, and saliency methods (e.g., Grad-CAM, Grad-CAM++~\cite{selvaraju_grad-cam_2017}) highlight visual regions associated with a prediction. However, these methods typically operate at the low-level pixel or token layer and rarely provide structured semantic explanations that users can interrogate through multiple interaction channels.
+
+% Concept-based interpretability addresses this limitation by using higher-level abstractions to explain predictions. 
+% For example, TCAV~\cite{Kim2018TCAV} measures directional sensitivity to predefined concepts, and ACE~\cite{Ghorbani2019ACE} automatically discovers candidate concepts. 
+% Concept Bottleneck Models (CBMs) explicitly mediate predictions through concept variables~\cite{Koh2020CBM}, enabling inspection and intervention, but they usually require architectural changes or concept supervision during training. 
+% Post-hoc CBMs~\cite{Yuksekgonul2022PCBM} make this approach more practical by learning concept bottlenecks over frozen pretrained representations.
+
+Concept-based interpretability addresses this limitation by using higher-level abstractions that better align with human reasoning. Concept Bottleneck Models (CBMs) make predictions through concept variables~\cite{Koh2020CBM}, creating a shared communication layer that supports user inspection and intervention. While traditional CBMs require architectural changes or concept supervision during training, post-hoc CBMs~\cite{Yuksekgonul2022PCBM} learn concept bottlenecks over frozen pretrained representations, making the approach more practical.
+
+% Interactive explainability systems such as the What-If Tool~\cite{Wexler2020WhatIf}, LIT~\cite{Tenney2020LIT}, explAIner~\cite{Spinner2020explAIner}, Manifold~\cite{Zhang2019Manifold}, and AI Explainability 360~\cite{Arya2020AIX360} support model probing and visual diagnosis.
+% Although more recent tools provide concept-centric interaction (e.g., ConceptExplainer~\cite{Huang2023ConceptExplainer}) or domain-specific manual counterfactual editing (e.g., CLARUS~\cite{Metsch2024CLARUS}), they generally do not provide a model-agnostic post-hoc concept bottleneck wrapper that jointly supports multiple concept acquisition strategies, local concept-space surrogates with fidelity reporting, and grounded natural-language explanations.
+
+To make these underlying models accessible, interactive explainability systems such as the What-If Tool~\cite{Wexler2020WhatIf}, LIT~\cite{Tenney2020LIT}, explAIner~\cite{Spinner2020explAIner}, Manifold~\cite{Zhang2019Manifold}, and AI Explainability 360~\cite{Arya2020AIX360} support model probing and visual diagnosis. Although newer tools provide concept-centric interaction (e.g., ConceptExplainer~\cite{Huang2023ConceptExplainer}) or domain-specific manual counterfactual editing (e.g., CLARUS~\cite{Metsch2024CLARUS}), they still lack a unified interaction-oriented framework that combines visual evidence, textual grounding, concept interventions, and conversational follow-up in one workflow; in addition, they do not offer a model-agnostic post-hoc framework that combines multiple concept acquisition strategies, local concept-space surrogates with fidelity reporting, and synchronized natural-language explanations.
+
+
+In this work, we present a post-hoc interactive framework that adds a concept bottleneck layer to any pretrained model without changing its architecture. Our system connects human and machine representations through three core capabilities: (i) multiple concept construction strategies, including VLM-based zero-shot scoring~\cite{radford_learning_2021} and label-free concepts~\cite{oikarinen_label-free_2022}; (ii) interpretable local approximations in concept space with clear fidelity reporting; and (iii) a multimodal interaction loop offering interactive what-if analysis, counterfactuals~\cite{Wachter2017Counterfactual,Mothilal2020DiCE}, evidence-grounded natural-language explanations via retrieval-augmented generation (RAG)~\cite{Lewis2020RAG}, and conversational follow-up.
+%
+\textbf{Overall}, this demo builds on our recent work combining CBMs with RAG for interpretable radiology reasoning~\cite{alam2025cbm,Alam2025ECIR}. We extend this foundation into a general-purpose interface that works with any model and supports image- and text-based tasks through a unified interaction design. \textcolor{blue}{\textit{See Demo: \href{https://www.youtube.com/watch?v=q1LQwQWIYUk}{https://www.youtube.com/watch?v=q1LQwQWIYUk}}}.
+
+
+\section{Framework Overview}
+% Let $f$ be a pretrained black-box classifier and $x$ be an input instance. Our wrapper constructs a concept representation $c(x)\in[0,1]^K$ and an interpretable surrogate $h$ such that $h(c(x)) \approx f(x)$ in a local neighborhood of $x$. Leveraging $c(x)$, we build an interpretable concept bottleneck interface that enables users to inspect and interact with concept-level activations, $c(x)$. Additionally, the system provides distinct supporting evidence for each concept and an interaction option that allows users to explore model behaviour in both the input and concept spaces.
+
+% Operationally, the wrapper first builds $c(x)$ using a selected concept construction strategy (\S2.1), then fits $h$ on local perturbations to approximate $f$ in concept space and reports fidelity (\S2.2). Together, this produces an interactive, model-agnostic concept bottleneck around $f$ without changing its weights.
+
+Let $f$ be a pretrained black-box classifier and $x$ be an input instance. Our framework constructs a concept representation $c(x)\in[0,1]^K$ and an interpretable approximation $h$ such that $h(c(x)) \approx f(x)$ in a local neighborhood of $x$. 
+Using $c(x)$, we build an interface that enables users to inspect and interact with concept-level activations. 
+The system provides distinct supporting evidence for each concept and allows users to explore model behavior in both the input and concept spaces.
+% 
+The framework builds $c(x)$ using a selected concept construction strategy, fits $h$ to local perturbations to approximate $f$ in concept space, and reports fidelity, creating an interactive, model-agnostic bottleneck around $f$ without changing its weights.
+
+% \subsection{Concept Extraction}
+% The system supports multiple concept extraction strategies, allowing users to trade off supervision, flexibility, and automation. We implemented multiple approaches following the literature, including post-hoc CBMs with trained probes~\cite{Yuksekgonul2022PCBM}, CLIP-based scoring for text-defined concepts~\cite{radford_learning_2021}, label-free concept vocabularies~\cite{oikarinen_label-free_2022}, and unsupervised concept discovery inspired by ACE-style pipelines~\cite{Ghorbani2019ACE}.
+
+% \paragraph{Trained probes (post-hoc CBM).}
+% Given features $\phi(x)$ extracted from an internal layer of $f$, we train lightweight concept probes (e.g., logistic regression) to predict concept presence and output activations $c_k(x)=\sigma(w_k^\top\phi(x)+b_k)$.
+
+% \paragraph{CLIP-based concepts.}
+% For vision models that expose CLIP embeddings, we score concepts in a zero-shot manner using cosine similarity between image (or patch) embeddings and text prompts~\cite{radford_learning_2021}. We also include a label-free vocabulary of curated visual concepts following label-free CBMs~\cite{oikarinen_label-free_2022}.
+
+% \paragraph{Unsupervised discovery.}
+% To explore emergent structures, we provide PCA- and K-means-based concept discovery over stored feature banks, labeling discovered directions/clusters with text prompts when available. ACE~\cite{Ghorbani2019ACE}, discovers candidate visual concepts by clustering image segments and then quantifies their influence via concept activation vectors (TCAV)~\cite{Kim2018TCAV}. Recent studies have explored data-efficient visual CBMs that construct dataset-specific concepts from localized image regions proposed by segmentation/detection foundation models~\cite{Prasse2024DCBM}; our PCA/K-means option plays a complementary role by deriving dataset-driven concepts directly in the black-box feature space with minimal additional components.
+
+% \paragraph{Text concepts.}
+% For text classification models, we compute token-level relevance signals (e.g., attention-based token saliency from transformer attention mechanisms~\cite{Vaswani2017Attention,Jain2019AttentionNotExplanation}) and aggregate them into semantic categories (e.g., \emph{insult}, \emph{threat}), producing a concept vector that supports inspection and interventions at the level of linguistic phenomena rather than individual tokens.
+
+\subsection{Concept Extraction}
+The system supports multiple concept extraction strategies, allowing users to balance supervision, flexibility, and automation. 
+We implemented several approaches following the literature, including post-hoc CBMs with trained probes~\cite{Yuksekgonul2022PCBM}, CLIP-based scoring for text-defined concepts~\cite{radford_learning_2021}, label-free concept vocabularies~\cite{oikarinen_label-free_2022}, and unsupervised concept discovery inspired by ACE-style pipelines~\cite{Ghorbani2019ACE}.
+
+\noindent\textbf{Trained probes (post-hoc CBM).}
+Given features $\phi(x)$ extracted from an internal layer of $f$, we train lightweight concept probes (e.g., logistic regression) to predict concept presence and output activations $c_k(x)=\sigma(w_k^\top\phi(x)+b_k)$.
+
+\noindent\textbf{CLIP-based concepts.}
+For vision models exposing CLIP embeddings, we score concepts in a zero-shot manner using cosine similarity between image (or patch) embeddings and text prompts~\cite{radford_learning_2021}. We also include a vocabulary of curated visual concepts following label-free CBMs~\cite{oikarinen_label-free_2022}.
+
+\noindent\textbf{Unsupervised discovery.}
+To explore emergent structures, we provide PCA- and K-means-based concept discovery over stored feature banks, to label discovered directions or clusters with text prompts when available. ACE~\cite{Ghorbani2019ACE} discovers candidate visual concepts by clustering image segments and quantifies their influence via concept activation vectors~\cite{Kim2018TCAV}. 
+While recent studies construct dataset-specific concepts using segmentation foundation models~\cite{Prasse2024DCBM}, our PCA/K-means option offers a complementary approach by deriving concepts directly within the black-box feature space.
+
+\noindent\textbf{Text concepts.}
+For text classification models, we compute token-level relevance signals (e.g., attention-based saliency~\cite{Vaswani2017Attention,Jain2019AttentionNotExplanation}) and aggregate them into semantic categories (e.g., \emph{insult}, \emph{threat}). This produces a concept vector supporting inspection and intervention at the level of linguistic phenomena rather than individual tokens.
+
+% \subsection{Surrogate Concept Bottleneck}
+% We fit an interpretable surrogate $h$ in concept space to approximate $f$ locally. Given perturbations around $x$ (e.g., modality-specific input edits or direct edits to a concept vector followed by re-scoring), we obtain training pairs $\{(c(x_i), f(x_i))\}$ and fit $h$ using one of three model families: logistic regression, ridge classifier, or a shallow decision tree. The surrogate provides a transparent approximation of how changes in concepts affect the black-box prediction near $x$ (via weights or rules), enabling what-if analysis and counterfactual search in concept space.
+
+% We report a local fidelity score,
+% \[
+% \mathrm{fidelity}(x)=\frac{1}{N}\sum_{i=1}^{N}\mathbb{I}\left[h(c(x_i))=f(x_i)\right],
+% \]
+% measuring agreement between the surrogate and the black-box in the sampled neighborhood. High fidelity indicates that $h$ is a good local proxy for $f$ under the chosen perturbation scheme, while low fidelity can signal either insufficient concept coverage (missing factors) or non-linear interactions that the selected surrogate family cannot capture.
+
+\subsection{Local Concept Approximation}
+We fit an interpretable model $h$ in concept space to approximate $f$ locally. Given perturbations around $x$ (e.g., modality-specific or direct concept edits followed by re-scoring), we obtain training pairs $\{(c(x_i), f(x_i))\}$ and fit $h$ using logistic regression, a ridge classifier, or a shallow decision tree. This interpretable model clarifies how changes in concepts affect the black-box prediction near $x$, enabling what-if analysis and counterfactual search in concept space.
+
+We measure agreement between the interpretable model and the black box in the sampled neighborhood using a local fidelity score, $\mathrm{fidelity}(x)=\frac{1}{N}\sum_{i=1}^{N}\mathbb{I}[h(c(x_i))=f(x_i)]$. High fidelity indicates that $h$ is a reliable local proxy for $f$ under the chosen perturbation scheme, while low fidelity can signal insufficient concept coverage (missing factors) or non-linear interactions that the selected model family cannot capture.
+
+\section{Interactive Demonstration Workflow}
+% The demo, as shown in Figure~\ref{fig:workflow}, presents the framework as an interactive pipeline. For a selected input $x$, the system (i) constructs a concept representation $c(x)$, (ii) fits a local surrogate $h$ that approximates the fixed predictor $f$ in concept space, and (iii) displays the concept variables for inspection and intervention. 
+% Across all scenarios, the pretrained predictor $f$ remains unchanged, and only the external concept bottleneck and its surrogate are constructed and used for interventions.
+As shown in Figure~\ref{fig:workflow}, the demo presents an interactive pipeline which enables users to inspect and interact with models based on the extracted concepts. Across all scenarios, the pretrained predictor $f$ remains unchanged, and only the external concept bottleneck and its local approximation are constructed and used for interventions.
+
+
+\subsection{Use Cases}
+% The system is designed as a general-purpose interface that can be adapted to different use cases and pretrained deep learning models.
+% In this demo, in order to showcase the different functionalities, we focused on three classification tasks: two vision tasks and one text task.
+
+% \paragraph{Medical imaging.}
+% We implemented chest X-ray classification using the COVID-QU dataset~\cite{chowdhury2020can} with radiological concepts (e.g., consolidation, ground-glass opacity), enabling concept-level inspection and Grad-CAM-based evidence maps.
+
+% \paragraph{Birds Species.}
+% For the second vision task, we implemented bird species classification on the CUB dataset~\cite{WahCUB_200_2011} with visual attribute concepts (e.g., colors, bill shape, patterns), enabling concept attribution maps and counterfactual inspection.
+
+% \paragraph{Toxic language.}
+% For text, we evaluated pre-trained models on toxic comment detection. We use a label-free approach \cite{oikarinen_label-free_2022} to curate a concept list (e.g., insult, threat, obscene content) for text categories (toxic, non-toxic).
+
+The system is designed as a general-purpose interface that can be adapted to different use cases and pretrained deep learning models. To demonstrate the system's multimodal scope across tasks and interactions, we feature three classification tasks: (1) \textbf{Medical imaging:} Chest X-ray classification (COVID-QU~\cite{chowdhury2020can}) using radiological concepts (e.g., consolidation) and Grad-CAM evidence maps; (2) \textbf{Bird species:} Classification on the CUB dataset~\cite{WahCUB_200_2011} using visual attributes and concept attribution maps; and (3) \textbf{Toxic language:} Text comment detection using label-free concepts~\cite{oikarinen_label-free_2022}. Across these tasks, users interact through synchronized visual evidence, textual explanations, concept-level interventions, and conversational queries.
+
+
+
+
+
+% \subsection{Setup}
+% \paragraph{Task, model, and input.}
+% Users start by selecting one of three tasks (medical imaging, toxic comment detection, birds classification), and then choose an example input and a pretrained model (Step 1 in Figure~\ref{fig:workflow}). Optionally, users can register additional models (e.g., via HuggingFace\footnote{\url{https://huggingface.co/} (Accessed February 15, 2026)}).
+
+% \paragraph{Concept strategy.}
+% Next, users select a concept extraction strategy (e.g., trained probes, CLIP-based, label-free, or unsupervised discovery) (Step 2 in Figure~\ref{fig:workflow}). The interface updates the concept list, activations, and concept-specific evidence views (heatmaps for images; highlighted spans for text), enabling comparison of how concept construction affects interpretability and surrogate fidelity.
+
+% \paragraph{Local surrogate.}
+% Finally, users select a surrogate family (logistic, ridge, or decision tree) (Step 3 in Figure~\ref{fig:workflow}). The system fits $h$ on local perturbations and displays surrogate parameters (weights or rules) and the fidelity score.
+
+% \subsection{Interactive Analysis}
+% \paragraph{Concept interventions and what-if analysis.}
+% Users can edit concept values using sliders to test structured interventions. The system updates the surrogate prediction under the edited concept vector and can optionally re-evaluate an edited input through $f$ (via modality-specific editing) to compare surrogate and black-box behavior.
+
+% \paragraph{Counterfactuals.}
+% We support counterfactual queries (Step 4 in Figure~\ref{fig:workflow}) in (i) concept space, by searching for small concept edits that change the surrogate prediction, and (ii) input space, via modality-specific edits such as masking the image regions, or removing or replacing text spans.
+
+% \paragraph{Evidence-grounded explanations.}
+% The system retrieves domain-relevant concept documentation and produces a concise explanation grounded in retrieved evidence using RAG~\cite{Lewis2020RAG} (Step 5 in Figure~\ref{fig:workflow}). Explanations highlight key concepts and optionally display supporting snippets.
+
+\subsection{Setup and Interaction}
+Users configure the interface by selecting a task, input instance, and pretrained model (Step 1, Figure~\ref{fig:workflow}). Custom models can also be registered (e.g., via HuggingFace\footnote{\url{https://huggingface.co/} (Accessed June 15, 2026)}). Choosing a concept extraction strategy (Step 2) populates the interface with concept activations and modality-specific evidence views (image heatmaps or text highlights). Finally, selecting a local model family fits the approximation $h$ and displays its parameters alongside the fidelity score (Step 3).
+
+Once configured, users can perform \textbf{what-if analysis} by moving concept sliders to observe how edits change the local surrogate prediction in real time. The system also supports \textbf{counterfactuals} (Step 4), allowing users to search for minimal concept edits that flip the prediction, or to apply direct input modifications (e.g., masking image regions, replacing text). Lastly, the interface uses RAG~\cite{Lewis2020RAG} to generate \textbf{evidence-grounded explanations} (Step 5), synthesizing a concise natural-language summary supported by retrieved domain documents, and enables \textbf{conversational follow-up} through a chat agent for additional user-driven queries.
+
+\section{Implementation}
+The backend is implemented in Python with pretrained models from PyTorch and HuggingFace. The frontend is a React-based dashboard. Concept probes and local approximations use lightweight classifiers to maintain interactive latency. Evidence-grounded explanations are generated via retrieval over an indexed corpus and optional LLM-based generation.
+
+\section{Conclusion, Limitations, and Future Work}
+% \textbf{Conclusion.} We presented an interactive demo of a model-agnostic, post-hoc framework that builds an external, multimodal concept interface around a fixed pretrained predictor. By extracting a concept vector and fitting a local approximation in concept space, the system supports concept inspection, what-if analysis, counterfactual queries, and evidence-grounded explanations without modifying the underlying model.
+
+\textbf{Conclusion.} We presented a model-agnostic, post-hoc interactive framework that provides a multimodal concept interface for fixed pretrained predictors. By extracting concept vectors and fitting local approximations, the system supports concept inspection, what-if analysis, counterfactuals, and evidence-grounded explanations without modifying the original model.
+
+\noindent\textbf{Limitations.} The framework is post hoc and depends on the quality and coverage of the extracted concepts; weak or misaligned concepts reduce interpretability. The approximation is trained locally, so agreement with the predictor is expected primarily near the selected input rather than globally. Additionally, post-hoc concept attributions and saliency maps provide correlational evidence and should not be interpreted as guaranteed causal explanations.
+
+\noindent\textbf{Future work.} We plan to evaluate additional use cases and concept-extraction methods to quantify their effects on concept quality and stability across tasks. We will also explore richer text concepts (e.g., phrase-level and domain taxonomies) and segmentation-aware visual concepts to better align explanations with coherent regions.
+
+
+
+
+
+\bibliographystyle{ACM-Reference-Format}
+\bibliography{references}
+
+
+
+\end{document}
