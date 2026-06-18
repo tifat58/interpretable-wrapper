@@ -11,6 +11,10 @@ export default defineConfig({
       '/explain': 'http://localhost:5000',
       '/chat': 'http://localhost:5000',
       '/samples': 'http://localhost:5000',
+      '/probe_state': 'http://localhost:5000',
+      '/probe_feedback': 'http://localhost:5000',
+      '/probe_retrain': 'http://localhost:5000',
+      '/probe_reset': 'http://localhost:5000',
     },
   },
 })

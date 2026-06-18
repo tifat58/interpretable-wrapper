@@ -6,6 +6,7 @@ from flask_cors import CORS
 from dummy_model import DummyModel
 from counterfactuals import compute_counterfactual
 from explanations import generate_explanation
+from concept_probe import probe_system
 
 app = Flask(__name__, static_folder="static")
 CORS(app)
@@ -108,6 +109,46 @@ def samples():
         raw = f.read()
     texts = [t.strip() for t in raw.split("---") if t.strip()]
     return jsonify({"samples": texts})
+
+
+# ── Actionable interpretability: concept-probe update ────────────────
+
+@app.route("/probe_state", methods=["GET"])
+def probe_state():
+    """Current probe readings, fidelity, concept accuracy, feedback count."""
+    return jsonify(probe_system.state())
+
+
+@app.route("/probe_feedback", methods=["POST"])
+def probe_feedback():
+    """Record an expert correction for the current example's concept."""
+    body = request.get_json(force=True) or {}
+    concept = body.get("concept")
+    corrected_value = body.get("corrected_value")
+    if concept is None:
+        result = probe_system.add_feedback(corrected_value=corrected_value)
+    else:
+        result = probe_system.add_feedback(concept=concept,
+                                           corrected_value=corrected_value)
+    return jsonify(result)
+
+
+@app.route("/probe_retrain", methods=["POST"])
+def probe_retrain():
+    """Re-fit the probe on data + collected feedback; report before/after."""
+    body = request.get_json(force=True) or {}
+    concept = body.get("concept")
+    if concept is None:
+        result = probe_system.retrain()
+    else:
+        result = probe_system.retrain(concept=concept)
+    return jsonify(result)
+
+
+@app.route("/probe_reset", methods=["POST"])
+def probe_reset():
+    """Restore the miscalibrated probe and clear feedback (demo replay)."""
+    return jsonify(probe_system.reset())
 
 
 if __name__ == "__main__":

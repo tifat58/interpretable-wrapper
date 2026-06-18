@@ -4,6 +4,7 @@ import PredictionPanel from './components/PredictionPanel'
 import ConceptPanel from './components/ConceptPanel'
 import ExplanationPanel from './components/ExplanationPanel'
 import ChatAgent from './components/ChatAgent'
+import ProbePanel from './components/ProbePanel'
 
 async function api(endpoint, body) {
   const res = await fetch(endpoint, {
@@ -104,6 +105,7 @@ export default function App() {
             onExplain={handleExplain}
             hasPrediction={!!prediction}
           />
+          <ProbePanel />
         </div>
 
         {/* Full-width bottom */}
