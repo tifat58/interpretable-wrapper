@@ -2,13 +2,14 @@
 set -euo pipefail
 
 # ─── Configuration ────────────────────────────────────────────────────
-CONDA_ENV="cbm-env"
-PYTHON_VERSION="3.10"
+# This MVP runs on the local .venv (Flask is installed there), NOT a conda env.
+VENV_DIR=".venv"
 BACKEND_PORT=5000
 FRONTEND_PORT=5173
 PROJECT_DIR="$(cd "$(dirname "$0")" && pwd)"
 BACKEND_DIR="$PROJECT_DIR/backend"
 FRONTEND_DIR="$PROJECT_DIR/frontend"
+VENV_PY="$PROJECT_DIR/$VENV_DIR/bin/python"
 LOG_DIR="$PROJECT_DIR/logs"
 
 GREEN='\033[0;32m'
@@ -22,39 +23,18 @@ ok()    { echo -e "${GREEN}[OK]${NC}    $*"; }
 warn()  { echo -e "${YELLOW}[WARN]${NC}  $*"; }
 fail()  { echo -e "${RED}[FAIL]${NC}  $*"; }
 
-# ─── 1. Initialize conda ─────────────────────────────────────────────
-info "Initializing conda..."
-
-# Source conda so we can use 'conda activate' in the script
-if [ -f "$HOME/opt/miniconda3/etc/profile.d/conda.sh" ]; then
-    source "$HOME/opt/miniconda3/etc/profile.d/conda.sh"
-elif [ -f "$HOME/miniconda3/etc/profile.d/conda.sh" ]; then
-    source "$HOME/miniconda3/etc/profile.d/conda.sh"
-elif [ -f "$HOME/anaconda3/etc/profile.d/conda.sh" ]; then
-    source "$HOME/anaconda3/etc/profile.d/conda.sh"
-elif command -v conda &>/dev/null; then
-    eval "$(conda shell.bash hook)"
-else
-    fail "conda not found. Please install Miniconda or Anaconda first."
-    exit 1
+# ─── 1. Locate the Python virtual environment ────────────────────────
+info "Locating Python environment..."
+if [ ! -x "$VENV_PY" ]; then
+    info "Virtual environment not found at $VENV_DIR — creating it..."
+    python3 -m venv "$PROJECT_DIR/$VENV_DIR"
+    ok "Created virtual environment at $VENV_DIR"
 fi
+ok "Using Python: $("$VENV_PY" --version) at $VENV_PY"
 
-# ─── 2. Create conda env if it doesn't exist ─────────────────────────
-if conda env list | grep -qw "$CONDA_ENV"; then
-    ok "Conda env '$CONDA_ENV' already exists."
-else
-    info "Creating conda env '$CONDA_ENV' (Python $PYTHON_VERSION)..."
-    conda create -y -n "$CONDA_ENV" python="$PYTHON_VERSION" > /dev/null 2>&1
-    ok "Conda env '$CONDA_ENV' created."
-fi
-
-info "Activating conda env '$CONDA_ENV'..."
-conda activate "$CONDA_ENV"
-ok "Active Python: $(python --version) at $(which python)"
-
-# ─── 3. Install Python dependencies ──────────────────────────────────
+# ─── 2. Install Python dependencies ──────────────────────────────────
 info "Installing Python dependencies..."
-pip install -q -r "$PROJECT_DIR/requirements.txt"
+"$VENV_PY" -m pip install -q -r "$PROJECT_DIR/requirements.txt"
 ok "Python dependencies installed."
 
 # ─── 4. Install frontend dependencies ────────────────────────────────
@@ -87,9 +67,10 @@ mkdir -p "$LOG_DIR"
 # ─── 7. Start backend ────────────────────────────────────────────────
 info "Starting Flask backend on port $BACKEND_PORT..."
 cd "$BACKEND_DIR"
-nohup python app.py > "$LOG_DIR/backend.log" 2>&1 &
+nohup "$VENV_PY" app.py > "$LOG_DIR/backend.log" 2>&1 &
 BACKEND_PID=$!
 cd "$PROJECT_DIR"
+echo "$BACKEND_PID" > "$LOG_DIR/backend.pid"
 info "Backend PID: $BACKEND_PID"
 
 # ─── 8. Start frontend ───────────────────────────────────────────────
@@ -98,6 +79,7 @@ cd "$FRONTEND_DIR"
 nohup npx vite --port $FRONTEND_PORT --strictPort > "$LOG_DIR/frontend.log" 2>&1 &
 FRONTEND_PID=$!
 cd "$PROJECT_DIR"
+echo "$FRONTEND_PID" > "$LOG_DIR/frontend.pid"
 info "Frontend PID: $FRONTEND_PID"
 
 # ─── 9. Wait and verify ──────────────────────────────────────────────
@@ -149,5 +131,5 @@ info "Backend:  http://127.0.0.1:$BACKEND_PORT  (PID $BACKEND_PID)"
 info "Frontend: http://localhost:$FRONTEND_PORT  (PID $FRONTEND_PID)"
 info "Logs:     $LOG_DIR/"
 echo ""
-info "To stop:  kill $BACKEND_PID $FRONTEND_PID"
+info "To stop:  ./stop.sh"
 echo "─────────────────────────────────────────────────"
