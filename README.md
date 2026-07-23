@@ -283,6 +283,17 @@ ConceptLens is intended for research and demonstration purposes. It is not a cli
 
 ---
 
+## License
+
+This repository is intended for **non-commercial research and demonstration purposes**.
+
+- **Paper, figures, screenshots, documentation, and other non-code materials:** licensed under **Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)**.
+- **Source code:** provided for non-commercial research and demonstration purposes only. Commercial use, redistribution of modified versions, or integration into production systems requires prior written permission from the authors.
+
+See [`LICENSE`](LICENSE) for details.
+
+---
+
 ## Citation
 
 If you use or refer to this demo, please cite the associated ICMI 2026 demo paper. A BibTeX entry will be added after the official ACM metadata is finalized.
