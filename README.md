@@ -2,7 +2,6 @@
 
 A model-agnostic interactive system that wraps around any black-box AI model (text or image) and makes it interpretable, controllable, and explainable through a concept-level user interface. Users can view predictions with concept activations, manipulate concepts via sliders, see counterfactual outputs, and generate evidence-grounded natural language explanations — all from a single dashboard. An optional conversational chat agent lets users ask questions about predictions in plain English.
 
-> **MVP Note:** All ML components are simulated with dummy data and template logic so the full interaction pipeline can be demonstrated end-to-end without real model weights.
 
 ## Setup
 
