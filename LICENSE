@@ -1,11 +1,28 @@
-## License
+SPDX-License-Identifier: CC-BY-NC-ND-4.0
+
+Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International
+(CC BY-NC-ND 4.0)
+
+Copyright (c) 2026 Hasan Md Tusfiqur Alam and contributors.
 
 This repository is intended for non-commercial research and demonstration purposes.
 
-The paper, figures, screenshots, documentation, and other non-code materials are licensed under the **Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License (CC BY-NC-ND 4.0)**.
+NON-CODE MATERIALS
 
-You may share these materials with appropriate credit for non-commercial purposes, but you may not distribute modified versions or use them commercially.
+The paper, figures, screenshots, documentation, demo descriptions, and other non-code materials in this repository are licensed under the Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License (CC BY-NC-ND 4.0).
 
-The source code is not licensed for commercial use. Commercial use, redistribution of modified versions, or integration into production systems requires prior written permission from the authors.
+You may share these materials for non-commercial purposes, provided that appropriate credit is given and a link to the license is provided. You may not use these materials commercially, and you may not distribute modified versions of these materials.
 
-See the full CC BY-NC-ND 4.0 license here: https://creativecommons.org/licenses/by-nc-nd/4.0/
+SOURCE CODE
+
+The source code in this repository is provided for non-commercial research and demonstration purposes only. Commercial use, redistribution of modified versions, or integration into production systems requires prior written permission from the authors.
+
+IMPORTANT NOTE
+
+Creative Commons licenses are primarily intended for creative works, documentation, media, and other non-code materials. The source code terms above are included to clarify the intended research-only use of this prototype.
+
+Full CC BY-NC-ND 4.0 license text:
+https://creativecommons.org/licenses/by-nc-nd/4.0/legalcode
+
+Human-readable summary:
+https://creativecommons.org/licenses/by-nc-nd/4.0/
