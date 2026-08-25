@@ -50,6 +50,18 @@ The demo is designed around three classification scenarios spanning visual and t
 
 ---
 
+## Dataset Licenses
+
+- **CUB-200-2011:** Available for **non-commercial research and educational purposes**. Caltech notes that it does not own the copyright to the individual images.  
+  Source: https://www.vision.caltech.edu/datasets/cub_200_2011/
+
+- **COVID-QU-Ex:** Distributed under the **Creative Commons Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)** license.  
+  Source: https://www.kaggle.com/datasets/anasmohammedtahir/covidqu
+
+These third-party datasets are **not covered by the license of this repository**. Users should comply with the respective dataset providers' terms and citation requirements.
+
+---
+
 ## System Overview
 
 ConceptLens follows a post-hoc wrapper design:
