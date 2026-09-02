@@ -18,7 +18,7 @@ export default function SurrogatePanel({ surrogateInfo, onFitSurrogate, hasPredi
   const typeOptions = [
     { id: 'logistic', label: 'Logistic Regression', icon: '📈' },
     { id: 'ridge', label: 'Ridge Regression', icon: '📉' },
-    { id: 'decision_tree', label: 'Decision Tree', icon: '🌳' },
+    { id: 'tree', label: 'Decision Tree', icon: '🌳' },
   ]
 
   // Color for fidelity score
@@ -184,7 +184,7 @@ export default function SurrogatePanel({ surrogateInfo, onFitSurrogate, hasPredi
               {/* Meta */}
               <div className="flex gap-2 text-[10px] text-gray-400">
                 <span className="bg-gray-50 px-2 py-0.5 rounded-full">
-                  {surrogateInfo.model_type}
+                  {surrogateInfo.surrogate_type}
                 </span>
                 <span className="bg-gray-50 px-2 py-0.5 rounded-full">
                   {surrogateInfo.n_perturbations} perturbs

@@ -2,6 +2,7 @@ import { useState } from 'react'
 
 export default function AttributionPanel({ attribution, inputType, loading, error }) {
   const [opacity, setOpacity] = useState(0.5)
+  const [showOverlay, setShowOverlay] = useState(true)
 
   if (loading) {
     return (
@@ -113,6 +114,23 @@ export default function AttributionPanel({ attribution, inputType, loading, erro
       {/* ─── Heatmap overlay with opacity slider ─── */}
       {type === 'heatmap' && (
         <div className="space-y-4">
+          {/* Toggle for saliency overlay */}
+          <div className="flex items-center justify-between">
+            <label className="flex items-center gap-2.5 text-sm text-gray-600 cursor-pointer select-none">
+              <div
+                onClick={() => setShowOverlay(!showOverlay)}
+                className={`relative w-11 h-6 rounded-full transition-colors duration-200 ${showOverlay ? 'bg-indigo-600' : 'bg-gray-300'}`}
+              >
+                <div
+                  className={`absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full shadow-sm transition-transform duration-200 ${
+                    showOverlay ? 'translate-x-5' : ''
+                  }`}
+                />
+              </div>
+              <span className="font-medium text-xs">Saliency overlay</span>
+            </label>
+          </div>
+
           {/* Layered compositing: original + heatmap */}
           {hasLayeredData ? (
             <div className="flex flex-col items-center">
@@ -126,8 +144,8 @@ export default function AttributionPanel({ attribution, inputType, loading, erro
                 <img
                   src={`data:image/png;base64,${heatmap_colored}`}
                   alt="Heatmap overlay"
-                  className="absolute inset-0 w-full h-full object-cover pointer-events-none"
-                  style={{ opacity }}
+                  className="absolute inset-0 w-full h-full object-cover pointer-events-none transition-opacity duration-300"
+                  style={{ opacity: showOverlay ? opacity : 0 }}
                   draggable={false}
                 />
               </div>

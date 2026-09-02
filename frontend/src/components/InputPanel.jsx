@@ -268,7 +268,7 @@ export default function InputPanel({ domain, inputType, onPredict, lastData, onE
                   Drop an image here or <span className="text-indigo-600">browse</span>
                 </p>
                 <p className="text-xs text-gray-400 mt-1">
-                  {domain === 'medical' ? 'Chest X-ray' : domain === 'birds' ? 'Bird photo' : 'Image file'}
+                    {domain === 'medical' ? 'Chest X-ray' : domain === 'vision' ? 'Bird photo' : 'Image file'}
                 </p>
               </div>
             )}

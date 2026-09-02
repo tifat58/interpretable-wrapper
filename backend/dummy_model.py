@@ -9,9 +9,30 @@ _TEXT_CONCEPTS = {
     "not toxic": {"insult": 0.10, "threat": 0.05, "obscene": 0.08, "identity_attack": 0.02},
 }
 
-_IMAGE_CONCEPTS = {
-    "pneumonia": {"opacity": 0.80, "cardiomegaly": 0.20, "effusion": 0.60, "consolidation": 0.40},
-    "normal": {"opacity": 0.10, "cardiomegaly": 0.05, "effusion": 0.08, "consolidation": 0.06},
+_MEDICAL_CONCEPTS = {
+    "COVID": {"Consolidation": 0.80, "Ground Glass Opacity": 0.75, "Bilateral Involvement": 0.65, "Lung Opacity": 0.60},
+    "Pneumonia": {"Pleural Effusion": 0.60, "Cardiomegaly": 0.45, "Edema": 0.40, "Atelectasis": 0.35},
+    "Normal": {"Clear Lung Fields": 0.90, "Consolidation": 0.05, "Lung Opacity": 0.08, "Edema": 0.03},
+}
+
+_BIRD_CONCEPTS = {
+    "bird_positive": {"has_red": 0.60, "has_blue": 0.40, "curved_bill": 0.30, "small_bird": 0.70},
+    "bird_default": {"has_brown": 0.50, "has_grey": 0.45, "cone_bill": 0.35, "small_bird": 0.60},
+}
+
+_VISION_CONCEPTS = {
+    "animal_positive": {"furry": 0.70, "quadrapedal": 0.65, "big": 0.50, "hunter": 0.40},
+    "animal_default": {"furry": 0.55, "quadrapedal": 0.50, "small": 0.45, "domestic": 0.35},
+}
+
+# Domain-specific label sets
+_DOMAIN_LABELS = {
+    "medical": ["COVID", "Pneumonia", "Normal"],
+    "toxicity": ["toxic", "not toxic"],
+    "vision": [
+        "Indigo Bunting", "Cardinal", "Blue Jay", "American Crow",
+        "Mallard", "House Sparrow", "Brown Pelican", "Common Raven",
+    ],
 }
 
 
@@ -31,12 +52,17 @@ def _text_looks_toxic(text: str) -> bool:
 
 
 class DummyModel:
-    """Simulated black-box model that returns predictions + concept activations."""
+    """Simulated black-box model that returns predictions + concept activations.
 
-    def predict(self, input_type: str, data: str | None = None):
+    Used as fallback when the real domain model fails to load.
+    Returns domain-appropriate labels and concepts.
+    """
+
+    def predict(self, input_type: str, data: str | None = None,
+                domain: str | None = None):
         if input_type == "text":
             return self._predict_text(data or "")
-        return self._predict_image()
+        return self._predict_image(domain or "medical")
 
     # ------------------------------------------------------------------
     def _predict_text(self, text: str):
@@ -46,9 +72,17 @@ class DummyModel:
         concepts = _add_noise(_TEXT_CONCEPTS[label])
         return {"label": label, "confidence": confidence, "concepts": concepts}
 
-    def _predict_image(self):
-        is_positive = random.random() > 0.4  # biased toward pneumonia for demo
-        label = "pneumonia" if is_positive else "normal"
-        confidence = round(random.uniform(0.70, 0.92), 3)
-        concepts = _add_noise(_IMAGE_CONCEPTS[label])
+    def _predict_image(self, domain: str):
+        labels = _DOMAIN_LABELS.get(domain, ["positive", "negative"])
+        label = random.choice(labels)
+        confidence = round(random.uniform(0.55, 0.85), 3)
+
+        if domain == "medical":
+            concept_key = label if label in _MEDICAL_CONCEPTS else "Normal"
+            concepts = _add_noise(_MEDICAL_CONCEPTS[concept_key])
+        elif domain == "vision":
+            concepts = _add_noise(_BIRD_CONCEPTS["bird_default"])
+        else:
+            concepts = {"feature_1": round(random.random(), 3), "feature_2": round(random.random(), 3)}
+
         return {"label": label, "confidence": confidence, "concepts": concepts}

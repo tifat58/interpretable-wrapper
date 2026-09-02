@@ -1,0 +1,8 @@
+{
+  "enabled_domains": [
+    "toxicity",
+    "birds",
+    "vision",
+    "medical"
+  ]
+}

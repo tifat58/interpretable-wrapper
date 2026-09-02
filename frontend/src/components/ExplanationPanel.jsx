@@ -80,7 +80,24 @@ export default function ExplanationPanel({ explanation, onExplain, hasPrediction
       {explanation && (
         <div className="space-y-4">
           <div className="bg-gray-50/80 rounded-xl p-4 border border-gray-100">
-            <p className="text-sm leading-relaxed text-gray-800">{explanation.explanation_text}</p>
+            {explanation.highlighted_segments ? (
+              <p className="text-sm leading-relaxed text-gray-800">
+                {explanation.highlighted_segments.map((seg, i) => {
+                  if (seg.type === 'decision') {
+                    return <span key={i} className="font-bold text-indigo-700 bg-indigo-50 px-1 rounded">{seg.text}</span>
+                  }
+                  if (seg.type === 'concept') {
+                    return <span key={i} className="font-semibold text-purple-700 bg-purple-50 px-1 rounded">{seg.text}</span>
+                  }
+                  if (seg.type === 'percentage') {
+                    return <span key={i} className="font-bold text-emerald-700 bg-emerald-50 px-1 rounded">{seg.text}</span>
+                  }
+                  return <span key={i}>{seg.text}</span>
+                })}
+              </p>
+            ) : (
+              <p className="text-sm leading-relaxed text-gray-800">{explanation.explanation_text}</p>
+            )}
           </div>
 
           {explanation.evidence_snippets?.length > 0 && (

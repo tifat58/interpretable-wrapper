@@ -2,7 +2,6 @@ import { useState, useCallback, useEffect } from 'react'
 import InputPanel from './components/InputPanel'
 import PredictionPanel from './components/PredictionPanel'
 import ConceptPanel from './components/ConceptPanel'
-import ConceptBars from './components/ConceptBars'
 import ExplanationPanel from './components/ExplanationPanel'
 import AttributionPanel from './components/AttributionPanel'
 import ChatAgent from './components/ChatAgent'
@@ -39,9 +38,6 @@ export default function App() {
   const [customConcepts, setCustomConcepts] = useState(null)
   const [surrogateInfo, setSurrogateInfo] = useState(null)
   const [conceptStrategyLabel, setConceptStrategyLabel] = useState('predefined')
-
-  // ── Comparison slot (pinned snapshot for right column) ──
-  const [compSlot, setCompSlot] = useState(null)
 
   // ── Fetch available domains on mount ──────────────────
   useEffect(() => {
@@ -85,16 +81,6 @@ export default function App() {
   // ── Counterfactual ────────────────────────────────────
   const handleCounterfactual = useCallback(async (modifiedConcepts) => {
     if (!originalConcepts || !prediction) return
-    // Auto-pin current state to comparison before applying counterfactual
-    if (!compSlot) {
-      setCompSlot({
-        prediction: { ...prediction },
-        concepts: { ...concepts },
-        strategyLabel: conceptStrategyLabel,
-        title: 'Before counterfactual',
-        attribution: attribution ? { ...attribution } : null,
-      })
-    }
     const result = await api('/counterfactual', {
       domain,
       original_concepts: originalConcepts,
@@ -105,7 +91,7 @@ export default function App() {
     setPrediction({ label: result.label, confidence: result.confidence })
     setConcepts(modifiedConcepts)
     setExplanation(null)
-  }, [domain, originalConcepts, prediction, selectedModel, concepts, conceptStrategyLabel, attribution, compSlot])
+  }, [domain, originalConcepts, prediction, selectedModel])
 
   // ── Explain ───────────────────────────────────────────
   const handleExplain = useCallback(async (evidence) => {
@@ -248,29 +234,12 @@ export default function App() {
     setConceptStrategy('predefined')
     setCustomConcepts(null)
     setConceptStrategyLabel('predefined')
-    setCompSlot(null)
     const domainObj = domains.find((dm) => dm.name === d)
     const defaultModel = domainObj?.models?.find((m) => m.default)
     setSelectedModel(defaultModel?.id ?? null)
   }, [domains])
 
-  // ── Pin / clear comparison ────────────────────────────
-  const handlePinToCompare = useCallback(() => {
-    if (!prediction || !concepts) return
-    setCompSlot({
-      prediction: { ...prediction },
-      concepts: { ...concepts },
-      strategyLabel: conceptStrategyLabel,
-      title: `${prediction.label} (${conceptStrategyLabel})`,
-      attribution: attribution ? { ...attribution } : null,
-    })
-  }, [prediction, concepts, conceptStrategyLabel, attribution])
-
-  const handleClearComparison = useCallback(() => {
-    setCompSlot(null)
-  }, [])
-
-  const domainIcons = { medical: '🩺', toxicity: '🛡️', birds: '🐦', vision: '🔬' }
+  const domainIcons = { medical: '🩺', toxicity: '🛡️', vision: '🐦' }
 
   return (
     <div className="min-h-screen bg-gray-50 dot-bg">
@@ -354,7 +323,7 @@ export default function App() {
       <div className="flex flex-col xl:flex-row gap-4 p-4 min-h-[calc(100vh-48px)]">
 
         {/* ─── LEFT SIDEBAR (controls) ─────────────────── */}
-        <aside className="w-full xl:w-[300px] xl:min-w-[300px] xl:max-w-[300px] xl:sticky xl:top-[48px] xl:self-start xl:max-h-[calc(100vh-48px)] xl:overflow-y-auto styled-scrollbar space-y-3 sidebar-panels">
+        <aside className="w-full xl:w-[340px] xl:min-w-[340px] xl:max-w-[340px] xl:sticky xl:top-[48px] xl:self-start xl:max-h-[calc(100vh-48px)] xl:overflow-y-auto styled-scrollbar space-y-3 sidebar-panels">
           <InputPanel
             domain={domain}
             inputType={inputType}
@@ -378,15 +347,9 @@ export default function App() {
             onFitSurrogate={handleFitSurrogate}
             hasPrediction={!!prediction}
           />
-          <ExplanationPanel
-            explanation={explanation}
-            onExplain={handleExplain}
-            hasPrediction={!!prediction}
-          />
-          <ChatAgent onSend={handleChat} hasPrediction={!!prediction} />
         </aside>
 
-        {/* ─── CENTER (primary results) ────────────────── */}
+        {/* ─── CENTER (prediction + concepts) ──────────── */}
         <main className="flex-1 min-w-0 space-y-4">
           <PredictionPanel prediction={prediction} domain={domain} />
 
@@ -399,22 +362,10 @@ export default function App() {
             activeConcept={attribution?.concept}
             strategyLabel={conceptStrategyLabel}
           />
+        </main>
 
-          {/* Pin to compare button */}
-          {prediction && concepts && (
-            <div className="flex justify-center">
-              <button
-                onClick={handlePinToCompare}
-                className="px-4 py-2 text-sm font-medium rounded-full bg-purple-600 text-white hover:bg-purple-700 transition shadow-sm flex items-center gap-2"
-              >
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
-                </svg>
-                Pin to Compare
-              </button>
-            </div>
-          )}
-
+        {/* ─── RIGHT (saliency, explanation, chat) ─────── */}
+        <aside className="w-full xl:flex-1 min-w-0 space-y-4">
           <AttributionPanel
             attribution={attribution}
             inputType={inputType}
@@ -423,65 +374,14 @@ export default function App() {
           />
 
           {editResult && <EditResultPanel editResult={editResult} />}
-        </main>
 
-        {/* ─── RIGHT (comparison) ──────────────────────── */}
-        <aside className="w-full xl:flex-1 min-w-0 space-y-4">
-          {compSlot ? (
-            <>
-              {/* Comparison header */}
-              <div className="flex items-center justify-between bg-purple-50 border border-purple-200 rounded-2xl px-4 py-2">
-                <div className="flex items-center gap-2">
-                  <span className="text-purple-600 text-base">📌</span>
-                  <span className="text-sm font-semibold text-purple-800 truncate">
-                    {compSlot.title}
-                  </span>
-                </div>
-                <button
-                  onClick={handleClearComparison}
-                  className="text-xs text-purple-400 hover:text-purple-600 font-medium transition"
-                >
-                  Clear
-                </button>
-              </div>
+          <ExplanationPanel
+            explanation={explanation}
+            onExplain={handleExplain}
+            hasPrediction={!!prediction}
+          />
 
-              <PredictionPanel
-                prediction={compSlot.prediction}
-                domain={domain}
-              />
-
-              <ConceptBars
-                concepts={compSlot.concepts}
-                referenceConcepts={concepts}
-                strategyLabel={compSlot.strategyLabel}
-                title="Pinned Concepts"
-              />
-
-              {compSlot.attribution && (
-                <AttributionPanel
-                  attribution={compSlot.attribution}
-                  inputType={inputType}
-                  loading={false}
-                  error={null}
-                />
-              )}
-            </>
-          ) : (
-            /* Empty state */
-            <div className="h-full flex items-center justify-center">
-              <div className="text-center py-16 px-8">
-                <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-purple-50 flex items-center justify-center">
-                  <svg className="w-8 h-8 text-purple-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7m0 10a2 2 0 002 2h2a2 2 0 002-2V7a2 2 0 00-2-2h-2a2 2 0 00-2 2" />
-                  </svg>
-                </div>
-                <h3 className="text-sm font-semibold text-gray-500 mb-1">Comparison Column</h3>
-                <p className="text-xs text-gray-400 max-w-[200px] mx-auto">
-                  Click <strong>Pin to Compare</strong> to snapshot the current results here, then change strategy or apply a counterfactual to compare side by side.
-                </p>
-              </div>
-            </div>
-          )}
+          <ChatAgent onSend={handleChat} hasPrediction={!!prediction} />
         </aside>
       </div>
     </div>

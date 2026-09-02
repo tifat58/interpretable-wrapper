@@ -31,6 +31,21 @@ backend/data/vectordb/
 backend/data/medical/
 backend/data/toxicity/
 backend/data/vision/
+backend/data/models/
+backend/data/chroma_db/
+
+# Datasets (download separately)
+datasets/
+
+# Paper (keep private)
+paper/
+*.tex
+*.bib
+*.docx
+PROJECT_SUMMARY.md
+
+# Runtime
+.pids
 
 # Word temp files
 ~$*.docx
