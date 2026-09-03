@@ -28,6 +28,7 @@ Re-run: `cd backend && python -m scripts.train_medical_cbm [--full]`
 ## Phase 2 — Explanation quality (next)
 
 - [x] Probe-gradient GradCAM: concept probe coefficients weight DenseNet feature maps directly instead of using the hardcoded concept→pathology map (`medical_model.py`); verified live with a 224×224 heatmap
+- [x] Fix K-Means concept scores collapsing to ~0 (softmax over 10 clusters forced scores to sum to 1, which collapses in 1024-d feature space); replaced with independent Gaussian-kernel membership per cluster (`auto_concepts.py::KMeansConceptExtractor`)
 - [ ] Counterfactuals from surrogate coefficients instead of guessed weights (`counterfactuals.py`)
 - [ ] Expand medical concept bank: Pneumothorax, Nodule, Mass, Fibrosis (already available as txv outputs)
 - [ ] Show surrogate fidelity + per-concept probe reliability (val AUC) in the UI

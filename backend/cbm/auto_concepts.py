@@ -284,7 +284,11 @@ class KMeansConceptExtractor:
     """Discover concepts by clustering the feature space.
 
     Each cluster represents a concept.  Concept activation for a new
-    sample is the softmax of negative distances to cluster centroids.
+    sample is an independent Gaussian-kernel membership score based on
+    distance to each cluster centroid (not a softmax across clusters —
+    softmax forces all activations to sum to 1, which collapses to
+    near-zero for every cluster but the single closest one in
+    high-dimensional feature spaces).
     """
 
     def __init__(self, n_concepts: int = 10):
@@ -293,6 +297,7 @@ class KMeansConceptExtractor:
         self._labels: list[str] = []
         self._feature_bank: np.ndarray | None = None
         self._domain: str | None = None
+        self._sigma: float = 1.0
 
     def fit(self, feature_bank: np.ndarray, domain: str | None = None) -> None:
         """Fit K-Means on the feature bank."""
@@ -304,6 +309,12 @@ class KMeansConceptExtractor:
         model.fit(feature_bank)
         self._centroids = model.cluster_centers_
         self._labels = [f"cluster_{i}" for i in range(n)]
+
+        # Kernel bandwidth = typical within-cluster distance, so membership
+        # scores stay in a usable range instead of one-hot collapsing.
+        dists_to_assigned = np.linalg.norm(
+            feature_bank - self._centroids[model.labels_], axis=1)
+        self._sigma = float(max(np.median(dists_to_assigned), 1e-6))
 
     def label_with_clip(self, vision_model: Any) -> None:
         """Auto-label clusters using CLIP or probe correlation."""
@@ -324,16 +335,12 @@ class KMeansConceptExtractor:
             logger.debug("Auto-labeling failed, keeping default labels", exc_info=True)
 
     def extract(self, features: np.ndarray) -> dict[str, float]:
-        """Compute concept activations as softmax of negative distances."""
+        """Compute per-cluster Gaussian-kernel membership activations."""
         if self._centroids is None:
             return {}
         x = features.reshape(1, -1)
-        # Euclidean distances to each centroid
         dists = np.linalg.norm(self._centroids - x, axis=1)
-        # Softmax of negative distances → closer = higher activation
-        neg_dists = -dists
-        exp_vals = np.exp(neg_dists - neg_dists.max())
-        activations = exp_vals / exp_vals.sum()
+        activations = np.exp(-(dists ** 2) / (2 * self._sigma ** 2))
 
         result = {}
         for i, label in enumerate(self._labels):
