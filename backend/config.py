@@ -29,7 +29,14 @@ def _load_enabled_domains() -> list[str]:
         try:
             with open(_DOMAIN_SETTINGS_PATH) as f:
                 data = json.load(f)
-            return data.get("enabled_domains", list(_DEFAULT_ENABLED_DOMAINS))
+            domains = data.get("enabled_domains", list(_DEFAULT_ENABLED_DOMAINS))
+            # Drop stale entries that no longer correspond to a real domain
+            # (e.g. a domain removed from DOMAIN_CONFIG after the settings
+            # file was written) so the toggle UI never gets stuck disabled.
+            valid = [d for d in domains if d in DOMAIN_CONFIG]
+            if valid != domains:
+                _save_enabled_domains(valid)
+            return valid
         except Exception:
             pass
     return list(_DEFAULT_ENABLED_DOMAINS)
@@ -40,9 +47,6 @@ def _save_enabled_domains(domains: list[str]) -> None:
     os.makedirs(os.path.dirname(_DOMAIN_SETTINGS_PATH), exist_ok=True)
     with open(_DOMAIN_SETTINGS_PATH, "w") as f:
         json.dump({"enabled_domains": domains}, f, indent=2)
-
-
-ENABLED_DOMAINS: list[str] = _load_enabled_domains()
 
 
 def set_domain_enabled(domain: str, enabled: bool) -> list[str]:
@@ -60,6 +64,10 @@ def set_domain_enabled(domain: str, enabled: bool) -> list[str]:
 def get_all_domains() -> list[str]:
     """Return all known domain names (enabled or not)."""
     return list(DOMAIN_CONFIG.keys())
+
+
+# Populated after DOMAIN_CONFIG (below) so stale-entry validation can run.
+ENABLED_DOMAINS: list[str] = []
 
 # ── Domain configuration ─────────────────────────────────────────────
 # Each domain entry defines everything needed to instantiate a model +
@@ -165,6 +173,8 @@ DOMAIN_CONFIG = {
         "feature_dim": 2048,
     },
 }
+
+ENABLED_DOMAINS[:] = _load_enabled_domains()
 
 # ── Runtime-registered custom models ────────────────────────────────
 # Populated via POST /models/register at runtime.

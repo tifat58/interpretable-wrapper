@@ -381,11 +381,16 @@ def concept_strategies():
                  "description": "Score concepts via CLIP text-image similarity (no training data needed)"},
                 {"id": "label_free", "name": "Label-Free CBM",
                  "description": "Auto-discovered concept bottleneck using CLIP with curated visual concepts"},
-                {"id": "pca", "name": "PCA Auto-Discovery",
-                 "description": "Automatically discover concept axes from model feature space"},
-                {"id": "kmeans", "name": "K-Means Auto-Discovery",
-                 "description": "Cluster feature space into interpretable groups"},
             ])
+        # PCA/K-Means only need the domain model's own feature space — no
+        # CLIP required — so offer them for every image domain, including
+        # specialist models like the medical DenseNet.
+        strategies.extend([
+            {"id": "pca", "name": "PCA Auto-Discovery",
+             "description": "Automatically discover concept axes from model feature space"},
+            {"id": "kmeans", "name": "K-Means Auto-Discovery",
+             "description": "Cluster feature space into interpretable groups"},
+        ])
 
     if input_type == "text":
         strategies.append(
