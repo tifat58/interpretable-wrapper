@@ -27,7 +27,7 @@ Re-run: `cd backend && python -m scripts.train_medical_cbm [--full]`
 
 ## Phase 2 — Explanation quality (next)
 
-- [ ] Probe-gradient GradCAM: backprop concept-probe score through features instead of the hardcoded concept→pathology map (`medical_model.py::_CONCEPT_TO_PATHOLOGY`)
+- [x] Probe-gradient GradCAM: concept probe coefficients weight DenseNet feature maps directly instead of using the hardcoded concept→pathology map (`medical_model.py`); verified live with a 224×224 heatmap
 - [ ] Counterfactuals from surrogate coefficients instead of guessed weights (`counterfactuals.py`)
 - [ ] Expand medical concept bank: Pneumothorax, Nodule, Mass, Fibrosis (already available as txv outputs)
 - [ ] Show surrogate fidelity + per-concept probe reliability (val AUC) in the UI

@@ -22,6 +22,10 @@ _TASK_HEAD_PATH = os.path.join(
     os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
     "data", "cbm", "medical", "task_head.pkl",
 )
+_PROBE_DIR = os.path.join(
+    os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
+    "data", "cbm", "medical", "probes",
+)
 
 # torchxrayvision pathology labels (order matters — matches model output)
 _TXV_PATHOLOGIES = [
@@ -159,6 +163,10 @@ class MedicalModel(BaseModel):
     def get_attribution(self, data: Any, target_concept: str | None = None) -> dict:
         tensor = self.preprocess(data).requires_grad_(True)
 
+        if target_concept and self._probe_coefficients(target_concept) is not None:
+            cam = self._probe_attribution(tensor, target_concept)
+            return self._format_attribution(data, cam, target_concept, "probe_gradcam")
+
         # Forward with gradient tracking — capture feature activations
         # and retain their grads for true GradCAM.
         captured = {}
@@ -235,6 +243,64 @@ class MedicalModel(BaseModel):
             "heatmap_colored": heatmap_colored_b64,
             "shape": [224, 224],
             "concept": target,
+        }
+
+    def _probe_coefficients(self, concept: str) -> np.ndarray | None:
+        path = os.path.join(_PROBE_DIR, f"{concept}.pkl")
+        if not os.path.isfile(path):
+            return None
+        try:
+            with open(path, "rb") as f:
+                probe = pickle.load(f)  # noqa: S301 — trusted local artifact
+            model = probe.get("model")
+            coefficients = getattr(model, "coef_", None)
+            if coefficients is None or coefficients.shape[0] != 1:
+                return None
+            return coefficients[0].astype(np.float32)
+        except (OSError, KeyError, AttributeError, ValueError):
+            logger.exception("Could not load concept probe %r", concept)
+            return None
+
+    def _probe_attribution(self, tensor: torch.Tensor, concept: str) -> np.ndarray:
+        coefficients = self._probe_coefficients(concept)
+        if coefficients is None:
+            raise RuntimeError(f"No binary probe available for {concept!r}")
+
+        captured: dict[str, torch.Tensor] = {}
+
+        def _fwd_hook(_module, _input, output):
+            captured["features"] = output
+
+        hook = self._model.features.register_forward_hook(_fwd_hook)
+        self._model.zero_grad()
+        self._model(tensor)
+        hook.remove()
+        features = captured.get("features")
+        if features is None:
+            raise RuntimeError("Feature hook did not fire")
+
+        # A linear probe over global-average-pooled features has a spatial
+        # equivalent: coefficient-weighted feature maps before pooling.
+        weights = torch.as_tensor(coefficients, device=features.device)
+        if weights.numel() != features.shape[1]:
+            raise RuntimeError("Probe and DenseNet feature dimensions differ")
+        cam = F.relu((features * weights.view(1, -1, 1, 1)).sum(dim=1, keepdim=True))
+        cam = F.interpolate(cam, size=(224, 224), mode="bilinear", align_corners=False)
+        cam = cam.squeeze().detach().cpu().numpy()
+        cam_min, cam_max = cam.min(), cam.max()
+        return (cam - cam_min) / (cam_max - cam_min) if cam_max - cam_min > 1e-8 else np.zeros_like(cam)
+
+    def _format_attribution(self, data: Any, cam: np.ndarray,
+                            concept: str, method: str) -> dict:
+        return {
+            "method": method,
+            "type": "heatmap",
+            "data": self._array_to_base64_png(cam),
+            "overlay": self._make_overlay(data, cam),
+            "original_image": self._encode_original(data),
+            "heatmap_colored": self._encode_colored_heatmap(cam),
+            "shape": [224, 224],
+            "concept": concept,
         }
 
     # ── helpers ──────────────────────────────────────────────────────
