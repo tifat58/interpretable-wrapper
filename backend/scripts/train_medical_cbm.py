@@ -73,6 +73,10 @@ _CONCEPT_TO_LABELER_PATHOLOGY = {
     "Cardiomegaly": "Cardiomegaly",
     "Edema": "Edema",
     "Atelectasis": "Atelectasis",
+    "Pneumothorax": "Pneumothorax",
+    "Nodule": "Nodule",
+    "Mass": "Mass",
+    "Fibrosis": "Fibrosis",
 }
 # Geometric concepts derived from lung masks + intensity statistics
 _MASK_CONCEPTS = ["Bilateral Involvement", "Peripheral Distribution",

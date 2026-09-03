@@ -30,7 +30,7 @@ Re-run: `cd backend && python -m scripts.train_medical_cbm [--full]`
 - [x] Probe-gradient GradCAM: concept probe coefficients weight DenseNet feature maps directly instead of using the hardcoded concept→pathology map (`medical_model.py`); verified live with a 224×224 heatmap
 - [x] Fix K-Means concept scores collapsing to ~0 (softmax over 10 clusters forced scores to sum to 1, which collapses in 1024-d feature space); replaced with independent Gaussian-kernel membership per cluster (`auto_concepts.py::KMeansConceptExtractor`)
 - [ ] Counterfactuals from surrogate coefficients instead of guessed weights (`counterfactuals.py`)
-- [ ] Expand medical concept bank: Pneumothorax, Nodule, Mass, Fibrosis (already available as txv outputs)
+- [x] Expand medical concept bank: Pneumothorax, Nodule, Mass, Fibrosis (labeler-aligned, same as the other 7 pathology concepts); test AUC 0.87–0.90; surrogate fidelity improved 0.75→0.79 (test), gt-accuracy 0.67→0.71
 - [ ] Show surrogate fidelity + per-concept probe reliability (val AUC) in the UI
 - [ ] Per-concept uncertainty display (flag low-AUC probes as unreliable)
 

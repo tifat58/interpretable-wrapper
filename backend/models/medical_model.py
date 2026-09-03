@@ -198,6 +198,10 @@ class MedicalModel(BaseModel):
             "Air Bronchogram": "Consolidation",
             "Lung Volume Loss": "Atelectasis",
             "Clear Lung Fields": "Pneumonia",  # inverse
+            "Pneumothorax": "Pneumothorax",
+            "Nodule": "Nodule",
+            "Mass": "Mass",
+            "Fibrosis": "Fibrosis",
         }
         pathology_name = _CONCEPT_TO_PATHOLOGY.get(target, target)
         idx = _TXV_PATHOLOGIES.index(pathology_name) if pathology_name in _TXV_PATHOLOGIES else 8

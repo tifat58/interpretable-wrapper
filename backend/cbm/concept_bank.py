@@ -24,6 +24,10 @@ _MEDICAL_CONCEPTS = {
     "Air Bronchogram": "Air-filled bronchi visible within opacified lung parenchyma",
     "Lung Volume Loss": "Decreased lung volume suggesting restrictive process or collapse",
     "Clear Lung Fields": "Lung fields appear clear with no significant opacities or infiltrates",
+    "Pneumothorax": "Air in the pleural space causing partial or complete lung collapse",
+    "Nodule": "A small round or oval opacity within the lung parenchyma",
+    "Mass": "A large soft-tissue opacity greater than 3cm within the lung field",
+    "Fibrosis": "Chronic scarring of lung tissue producing reticular or linear opacities",
 }
 
 # ═══════════════════════════════════════════════════════════════════════

@@ -13,6 +13,10 @@
     "Cardiomegaly": 0.6227,
     "Edema": 0.5676,
     "Atelectasis": 0.6288,
+    "Pneumothorax": 0.6244,
+    "Nodule": 0.6308,
+    "Mass": 0.6435,
+    "Fibrosis": 0.6296,
     "Air Bronchogram": 0.6313
   },
   "normal_reference": {
@@ -22,9 +26,9 @@
     "area_q10": 0.181
   },
   "task_head": {
-    "val_ece_before": 0.05059649523075397,
+    "val_ece_before": 0.05059543777037192,
     "temperature": 0.8362,
-    "val_ece_after": 0.02066352104281519,
+    "val_ece_after": 0.020662852623560518,
     "val_accuracy": 0.8078,
     "val_macro_auc": 0.9317,
     "test_accuracy": 0.8108,
@@ -58,15 +62,15 @@
       "val_auc": 0.9474,
       "test_auc": 0.9408,
       "test_accuracy": 0.8544,
-      "test_ece": 0.0256
+      "test_ece": 0.0264
     },
     "Pleural Effusion": {
       "train_pos_rate": 0.2,
       "temperature": 1.0974,
       "val_auc": 0.935,
       "test_auc": 0.9364,
-      "test_accuracy": 0.8478,
-      "test_ece": 0.0241
+      "test_accuracy": 0.8483,
+      "test_ece": 0.0246
     },
     "Cardiomegaly": {
       "train_pos_rate": 0.2,
@@ -86,9 +90,9 @@
     },
     "Atelectasis": {
       "train_pos_rate": 0.2,
-      "temperature": 0.9964,
+      "temperature": 0.9963,
       "val_auc": 0.911,
-      "test_auc": 0.9119,
+      "test_auc": 0.912,
       "test_accuracy": 0.8248,
       "test_ece": 0.0196
     },
@@ -102,11 +106,11 @@
     },
     "Peripheral Distribution": {
       "train_pos_rate": 0.0162,
-      "temperature": 2.7493,
-      "val_auc": 0.8613,
-      "test_auc": 0.8825,
-      "test_accuracy": 0.974,
-      "test_ece": 0.0054
+      "temperature": 2.1749,
+      "val_auc": 0.8471,
+      "test_auc": 0.9011,
+      "test_accuracy": 0.8894,
+      "test_ece": 0.0136
     },
     "Air Bronchogram": {
       "train_pos_rate": 0.183,
@@ -125,18 +129,50 @@
       "test_ece": 0.0209
     },
     "Clear Lung Fields": {
-      "train_pos_rate": 0.2888,
-      "temperature": 1.0648,
-      "val_auc": 0.9675,
-      "test_auc": 0.9677,
-      "test_accuracy": 0.9009,
-      "test_ece": 0.0131
+      "train_pos_rate": 0.2462,
+      "temperature": 1.0291,
+      "val_auc": 0.9698,
+      "test_auc": 0.9675,
+      "test_accuracy": 0.8954,
+      "test_ece": 0.0168
+    },
+    "Pneumothorax": {
+      "train_pos_rate": 0.2,
+      "temperature": 1.0808,
+      "val_auc": 0.9161,
+      "test_auc": 0.9015,
+      "test_accuracy": 0.8148,
+      "test_ece": 0.0291
+    },
+    "Nodule": {
+      "train_pos_rate": 0.2,
+      "temperature": 1.0996,
+      "val_auc": 0.8667,
+      "test_auc": 0.866,
+      "test_accuracy": 0.7693,
+      "test_ece": 0.0113
+    },
+    "Mass": {
+      "train_pos_rate": 0.2,
+      "temperature": 1.2083,
+      "val_auc": 0.8855,
+      "test_auc": 0.8705,
+      "test_accuracy": 0.7698,
+      "test_ece": 0.0365
+    },
+    "Fibrosis": {
+      "train_pos_rate": 0.2,
+      "temperature": 1.1815,
+      "val_auc": 0.8601,
+      "test_auc": 0.8721,
+      "test_accuracy": 0.7633,
+      "test_ece": 0.0255
     }
   },
   "surrogate": {
-    "val_fidelity": 0.7528,
-    "val_gt_accuracy": 0.6622,
-    "test_fidelity": 0.7472,
-    "test_gt_accuracy": 0.6727
+    "val_fidelity": 0.7938,
+    "val_gt_accuracy": 0.6952,
+    "test_fidelity": 0.7913,
+    "test_gt_accuracy": 0.7077
   }
 }
