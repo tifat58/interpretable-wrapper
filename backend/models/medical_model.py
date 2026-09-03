@@ -5,6 +5,8 @@ from __future__ import annotations
 import base64
 import io
 import logging
+import os
+import pickle
 from typing import Any
 
 import numpy as np
@@ -15,6 +17,11 @@ from PIL import Image
 from models.base import BaseModel
 
 logger = logging.getLogger(__name__)
+
+_TASK_HEAD_PATH = os.path.join(
+    os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
+    "data", "cbm", "medical", "task_head.pkl",
+)
 
 # torchxrayvision pathology labels (order matters — matches model output)
 _TXV_PATHOLOGIES = [
@@ -32,6 +39,8 @@ class MedicalModel(BaseModel):
         self._model = None
         self._features_hook = None
         self._last_features: torch.Tensor | None = None
+        self._task_head = None
+        self._task_head_classes: list[str] = []
 
     # ── loading ──────────────────────────────────────────────────────
     def load(self) -> None:
@@ -46,6 +55,21 @@ class MedicalModel(BaseModel):
             self._last_features = output
 
         self._features_hook = self._model.features.register_forward_hook(_hook)
+
+        # Trained task head (features → COVID-19/Non-COVID/Normal), produced
+        # by scripts/train_medical_cbm.py.  Falls back to the pathology
+        # heuristic in predict_raw when absent.
+        if os.path.isfile(_TASK_HEAD_PATH):
+            with open(_TASK_HEAD_PATH, "rb") as f:
+                data = pickle.load(f)  # noqa: S301 — trusted local file
+            self._task_head = data["model"]
+            self._task_head_classes = data["classes"]
+            logger.info("MedicalModel: trained task head loaded (%s)",
+                        self._task_head_classes)
+        else:
+            logger.warning("MedicalModel: no task head found — using "
+                           "pathology-score heuristic")
+
         self._loaded = True
         logger.info("MedicalModel loaded (%s)", self.device)
 
@@ -78,9 +102,20 @@ class MedicalModel(BaseModel):
             if i < len(probs):
                 raw_scores[name] = float(probs[i])
 
-        # Derive 3-class lung prediction from pathology scores.
-        # Key pathology indices: Pneumonia=8, Consolidation=1,
-        # Infiltration=2, Effusion=7, Edema=4.
+        # Preferred path: calibrated logistic head on penultimate features.
+        if self._task_head is not None and self._last_features is not None:
+            pooled = F.adaptive_avg_pool2d(self._last_features, 1).flatten(1)
+            head_probs = self._task_head.predict_proba(pooled.cpu().numpy())[0]
+            idx = int(head_probs.argmax())
+            return {
+                "label": self._task_head_classes[idx],
+                "confidence": round(float(head_probs[idx]), 4),
+                "raw_scores": raw_scores,
+                "class_probs": {c: round(float(p), 4)
+                                for c, p in zip(self._task_head_classes, head_probs)},
+            }
+
+        # Fallback heuristic: derive 3-class prediction from pathology scores.
         pneumonia_score = raw_scores.get("Pneumonia", 0.0)
         consolidation_score = raw_scores.get("Consolidation", 0.0)
         infiltration_score = raw_scores.get("Infiltration", 0.0)
@@ -95,7 +130,8 @@ class MedicalModel(BaseModel):
         # Normal: absence of pathology
         normal_score = 1.0 - max(covid_score, non_covid_score)
 
-        scores_3c = {"COVID": covid_score, "Pneumonia": non_covid_score, "Normal": normal_score}
+        scores_3c = {"COVID-19": covid_score, "Non-COVID": non_covid_score,
+                     "Normal": normal_score}
         label = max(scores_3c, key=scores_3c.get)
         confidence = scores_3c[label]
 

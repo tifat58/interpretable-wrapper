@@ -30,7 +30,7 @@ _LABEL_PAIRS = {
     "text": ("toxic", "not toxic"),
     "image": ("covid-19", "normal"),
     "toxicity": ("toxic", "not toxic"),
-    "medical": ("COVID", "Normal"),
+    "medical": ("COVID-19", "Normal"),
     "vision": ("identified", "unknown"),
 }
 

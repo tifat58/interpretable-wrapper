@@ -1,0 +1,142 @@
+{
+  "dataset": "COVID-QU-Ex (Lung Segmentation Data)",
+  "n_train": 6000,
+  "n_val": 1998,
+  "n_test": 1998,
+  "labeler_model": "densenet121-res224-all",
+  "feature_model": "densenet121-res224-chex",
+  "concept_thresholds": {
+    "Consolidation": 0.6313,
+    "Ground Glass Opacity": 0.643,
+    "Lung Opacity": 0.6929,
+    "Pleural Effusion": 0.6303,
+    "Cardiomegaly": 0.6227,
+    "Edema": 0.5676,
+    "Atelectasis": 0.6288,
+    "Air Bronchogram": 0.6313
+  },
+  "normal_reference": {
+    "int_mean": 0.3788,
+    "int_std": 0.0956,
+    "periph_q75": 1.5463,
+    "area_q10": 0.181
+  },
+  "task_head": {
+    "val_ece_before": 0.05059649523075397,
+    "temperature": 0.8362,
+    "val_ece_after": 0.02066352104281519,
+    "val_accuracy": 0.8078,
+    "val_macro_auc": 0.9317,
+    "test_accuracy": 0.8108,
+    "test_macro_auc": 0.9359,
+    "test_per_class_auc": {
+      "COVID-19": 0.9054,
+      "Non-COVID": 0.941,
+      "Normal": 0.9613
+    }
+  },
+  "probes": {
+    "Consolidation": {
+      "train_pos_rate": 0.2,
+      "temperature": 1.2355,
+      "val_auc": 0.9172,
+      "test_auc": 0.9314,
+      "test_accuracy": 0.8423,
+      "test_ece": 0.0181
+    },
+    "Ground Glass Opacity": {
+      "train_pos_rate": 0.2,
+      "temperature": 1.1488,
+      "val_auc": 0.9123,
+      "test_auc": 0.9145,
+      "test_accuracy": 0.8298,
+      "test_ece": 0.0194
+    },
+    "Lung Opacity": {
+      "train_pos_rate": 0.2,
+      "temperature": 1.2493,
+      "val_auc": 0.9474,
+      "test_auc": 0.9408,
+      "test_accuracy": 0.8544,
+      "test_ece": 0.0256
+    },
+    "Pleural Effusion": {
+      "train_pos_rate": 0.2,
+      "temperature": 1.0974,
+      "val_auc": 0.935,
+      "test_auc": 0.9364,
+      "test_accuracy": 0.8478,
+      "test_ece": 0.0241
+    },
+    "Cardiomegaly": {
+      "train_pos_rate": 0.2,
+      "temperature": 1.0748,
+      "val_auc": 0.8937,
+      "test_auc": 0.8757,
+      "test_accuracy": 0.7723,
+      "test_ece": 0.0288
+    },
+    "Edema": {
+      "train_pos_rate": 0.2,
+      "temperature": 1.1151,
+      "val_auc": 0.9401,
+      "test_auc": 0.9494,
+      "test_accuracy": 0.8709,
+      "test_ece": 0.022
+    },
+    "Atelectasis": {
+      "train_pos_rate": 0.2,
+      "temperature": 0.9964,
+      "val_auc": 0.911,
+      "test_auc": 0.9119,
+      "test_accuracy": 0.8248,
+      "test_ece": 0.0196
+    },
+    "Bilateral Involvement": {
+      "train_pos_rate": 0.2587,
+      "temperature": 0.9256,
+      "val_auc": 0.9852,
+      "test_auc": 0.9834,
+      "test_accuracy": 0.9224,
+      "test_ece": 0.011
+    },
+    "Peripheral Distribution": {
+      "train_pos_rate": 0.0162,
+      "temperature": 2.7493,
+      "val_auc": 0.8613,
+      "test_auc": 0.8825,
+      "test_accuracy": 0.974,
+      "test_ece": 0.0054
+    },
+    "Air Bronchogram": {
+      "train_pos_rate": 0.183,
+      "temperature": 1.1788,
+      "val_auc": 0.9214,
+      "test_auc": 0.9317,
+      "test_accuracy": 0.8448,
+      "test_ece": 0.0174
+    },
+    "Lung Volume Loss": {
+      "train_pos_rate": 0.1842,
+      "temperature": 1.0454,
+      "val_auc": 0.9261,
+      "test_auc": 0.9288,
+      "test_accuracy": 0.8323,
+      "test_ece": 0.0209
+    },
+    "Clear Lung Fields": {
+      "train_pos_rate": 0.2888,
+      "temperature": 1.0648,
+      "val_auc": 0.9675,
+      "test_auc": 0.9677,
+      "test_accuracy": 0.9009,
+      "test_ece": 0.0131
+    }
+  },
+  "surrogate": {
+    "val_fidelity": 0.7528,
+    "val_gt_accuracy": 0.6622,
+    "test_fidelity": 0.7472,
+    "test_gt_accuracy": 0.6727
+  }
+}

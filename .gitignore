@@ -33,6 +33,7 @@ backend/data/toxicity/
 backend/data/vision/
 backend/data/models/
 backend/data/chroma_db/
+backend/data/cbm/*/cache/
 
 # Datasets (download separately)
 datasets/
