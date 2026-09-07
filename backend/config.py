@@ -1,4 +1,4 @@
-"""Central configuration for the Interpretable Wrapper backend."""
+"""Central configuration for the ConceptLens backend."""
 
 from __future__ import annotations
 

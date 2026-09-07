@@ -1,4 +1,4 @@
-"""Flask REST API for the Interpretable Wrapper.
+"""Flask REST API for ConceptLens.
 
 Phase 1A+1B: domain-dispatching via DomainManager with lazy-loaded
 PostHocCBM instances, RAG explanations, LLM chat, input editing.

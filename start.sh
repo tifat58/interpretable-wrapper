@@ -2,7 +2,7 @@
 set -euo pipefail
 
 # ═══════════════════════════════════════════════════════════════════════
-# Interpretable Wrapper — Start / Stop / Restart
+# ConceptLens — Start / Stop / Restart
 #
 # Usage:
 #   ./start.sh              Start both services (kill existing first)
@@ -94,7 +94,7 @@ fi
 # ═══════════════════════════════════════════════════════════════════════
 echo ""
 echo -e "${BOLD}╔══════════════════════════════════════════════════╗${NC}"
-echo -e "${BOLD}║     Interpretable Wrapper — Starting...         ║${NC}"
+echo -e "${BOLD}║          ConceptLens — Starting...              ║${NC}"
 echo -e "${BOLD}╚══════════════════════════════════════════════════╝${NC}"
 echo ""
 
