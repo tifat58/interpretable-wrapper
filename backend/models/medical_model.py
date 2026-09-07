@@ -60,7 +60,7 @@ class MedicalModel(BaseModel):
 
         self._features_hook = self._model.features.register_forward_hook(_hook)
 
-        # Trained task head (features → COVID-19/Non-COVID/Normal), produced
+        # Trained task head (features → COVID Pneumonia/Pneumonia/Normal), produced
         # by scripts/train_medical_cbm.py.  Falls back to the pathology
         # heuristic in predict_raw when absent.
         if os.path.isfile(_TASK_HEAD_PATH):
@@ -134,7 +134,7 @@ class MedicalModel(BaseModel):
         # Normal: absence of pathology
         normal_score = 1.0 - max(covid_score, non_covid_score)
 
-        scores_3c = {"COVID-19": covid_score, "Non-COVID": non_covid_score,
+        scores_3c = {"COVID Pneumonia": covid_score, "Pneumonia": non_covid_score,
                      "Normal": normal_score}
         label = max(scores_3c, key=scores_3c.get)
         confidence = scores_3c[label]

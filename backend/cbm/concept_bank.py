@@ -9,7 +9,7 @@ from __future__ import annotations
 
 
 # ═══════════════════════════════════════════════════════════════════════
-# MEDICAL — Lung X-ray concepts (COVID-19 / Non-COVID / Normal)
+# MEDICAL — Lung X-ray concepts (COVID Pneumonia / Pneumonia / Normal)
 # ═══════════════════════════════════════════════════════════════════════
 _MEDICAL_CONCEPTS = {
     "Consolidation": "Dense consolidation in the lung fields indicating alveolar filling",

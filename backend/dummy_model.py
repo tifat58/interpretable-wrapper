@@ -27,7 +27,7 @@ _VISION_CONCEPTS = {
 
 # Domain-specific label sets
 _DOMAIN_LABELS = {
-    "medical": ["COVID", "Pneumonia", "Normal"],
+    "medical": ["COVID Pneumonia", "Pneumonia", "Normal"],
     "toxicity": ["toxic", "not toxic"],
     "vision": [
         "Indigo Bunting", "Cardinal", "Blue Jay", "American Crow",

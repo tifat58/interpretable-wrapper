@@ -81,8 +81,8 @@ DOMAIN_CONFIG = {
     "medical": {
         "input_type": "image",
         "probe_type": "logistic",
-        "description": "Lung X-ray classification (COVID-19 / Non-COVID / Normal)",
-        "labels": ["COVID-19", "Non-COVID", "Normal"],
+        "description": "Lung X-ray classification (COVID Pneumonia / Pneumonia / Normal)",
+        "labels": ["COVID Pneumonia", "Pneumonia", "Normal"],
         "primary_target": None,
         "models": [
             {

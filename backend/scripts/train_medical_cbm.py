@@ -61,7 +61,8 @@ _DATA_ROOT = os.path.join(_PROJECT_ROOT, "datasets",
 _SAVE_DIR = os.path.join(_BACKEND_DIR, "data", "cbm", "medical")
 _CACHE_DIR = os.path.join(_SAVE_DIR, "cache")
 
-CLASS_NAMES = ["COVID-19", "Non-COVID", "Normal"]
+DATASET_CLASS_NAMES = ["COVID-19", "Non-COVID", "Normal"]
+CLASS_NAMES = ["COVID Pneumonia", "Pneumonia", "Normal"]
 
 # Concepts scored by the independent labeler model (concept → txv pathology)
 _LABELER_WEIGHTS = "densenet121-res224-all"
@@ -93,7 +94,7 @@ def index_split(split: str, max_samples: int | None, seed: int = 42
                 ) -> tuple[list[str], list[str], np.ndarray]:
     """Return (image_paths, mask_paths, class_indices) for a split."""
     image_paths, mask_paths, y = [], [], []
-    for ci, cls in enumerate(CLASS_NAMES):
+    for ci, cls in enumerate(DATASET_CLASS_NAMES):
         img_dir = os.path.join(_DATA_ROOT, split, cls, "images")
         msk_dir = os.path.join(_DATA_ROOT, split, cls, "lung masks")
         files = sorted(f for f in os.listdir(img_dir)

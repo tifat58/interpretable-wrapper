@@ -36,7 +36,7 @@ Action:
 1. Click the COVID-19 thumbnail.
 2. Click Predict.
 3. Point to the prediction, confidence, and concept bars.
-4. Click the Non-COVID thumbnail and Predict.
+4. Click the Pneumonia thumbnail and Predict.
 5. Click the Normal thumbnail and Predict.
 
 Say for COVID-19:
@@ -45,7 +45,7 @@ fingerprint is more informative than the class name alone: bilateral
 involvement, lung opacity, consolidation, and ground-glass opacity are the
 main evidence signals in this case."
 
-Say for Non-COVID:
+Say for Pneumonia:
 "The important comparison is not just that this is abnormal. The concept
 profile changes. Concepts such as effusion, edema, cardiomegaly, or
 atelectasis can provide a different explanation from the COVID-19 pattern."

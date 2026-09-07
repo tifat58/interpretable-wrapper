@@ -26,16 +26,16 @@
     "area_q10": 0.181
   },
   "task_head": {
-    "val_ece_before": 0.05059543777037192,
+    "val_ece_before": 0.05059736090021448,
     "temperature": 0.8362,
-    "val_ece_after": 0.020662852623560518,
+    "val_ece_after": 0.020197866855560225,
     "val_accuracy": 0.8078,
     "val_macro_auc": 0.9317,
     "test_accuracy": 0.8108,
     "test_macro_auc": 0.9359,
     "test_per_class_auc": {
-      "COVID-19": 0.9054,
-      "Non-COVID": 0.941,
+      "COVID Pneumonia": 0.9054,
+      "Pneumonia": 0.941,
       "Normal": 0.9613
     }
   },
@@ -50,7 +50,7 @@
     },
     "Ground Glass Opacity": {
       "train_pos_rate": 0.2,
-      "temperature": 1.1488,
+      "temperature": 1.1489,
       "val_auc": 0.9123,
       "test_auc": 0.9145,
       "test_accuracy": 0.8298,
@@ -62,7 +62,7 @@
       "val_auc": 0.9474,
       "test_auc": 0.9408,
       "test_accuracy": 0.8544,
-      "test_ece": 0.0264
+      "test_ece": 0.0256
     },
     "Pleural Effusion": {
       "train_pos_rate": 0.2,
@@ -106,11 +106,11 @@
     },
     "Peripheral Distribution": {
       "train_pos_rate": 0.0162,
-      "temperature": 2.1749,
-      "val_auc": 0.8471,
-      "test_auc": 0.9011,
-      "test_accuracy": 0.8894,
-      "test_ece": 0.0136
+      "temperature": 1.3329,
+      "val_auc": 0.9215,
+      "test_auc": 0.9397,
+      "test_accuracy": 0.954,
+      "test_ece": 0.013
     },
     "Air Bronchogram": {
       "train_pos_rate": 0.183,
@@ -132,7 +132,7 @@
       "train_pos_rate": 0.2462,
       "temperature": 1.0291,
       "val_auc": 0.9698,
-      "test_auc": 0.9675,
+      "test_auc": 0.9676,
       "test_accuracy": 0.8954,
       "test_ece": 0.0168
     },
@@ -170,9 +170,9 @@
     }
   },
   "surrogate": {
-    "val_fidelity": 0.7938,
-    "val_gt_accuracy": 0.6952,
-    "test_fidelity": 0.7913,
-    "test_gt_accuracy": 0.7077
+    "val_fidelity": 0.7908,
+    "val_gt_accuracy": 0.6947,
+    "test_fidelity": 0.7918,
+    "test_gt_accuracy": 0.7097
   }
 }

@@ -59,7 +59,7 @@ _EVIDENCE = {
         "The text has an overall negative emotional tone, which contributes "
         "to the perception of hostility even without explicit toxic words."
     ),
-    # ── medical (lung X-ray — COVID-19 / Non-COVID / Normal) ────────
+    # ── medical (lung X-ray — COVID Pneumonia / Pneumonia / Normal) ──
     "Consolidation": (
         "Dense consolidation in the lung fields indicates alveolar filling, "
         "a hallmark of bacterial pneumonia and severe COVID-19 infection."
