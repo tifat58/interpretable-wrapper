@@ -98,11 +98,13 @@ export default function ConceptStrategySelector({ domain, onStrategyChange, curr
           {/* Custom concept input */}
           {currentStrategy === 'custom' && (
             <div className="mt-2 pt-2 border-t border-gray-100 space-y-2">
-              <p className="text-xs text-gray-500 font-semibold">Enter concepts (comma-separated)</p>
+              <p className="text-xs text-gray-500 font-semibold">
+                {domain === 'medical' ? 'Choose trained medical concepts (comma-separated)' : 'Enter concepts (comma-separated)'}
+              </p>
               <textarea
                 className="w-full text-xs border border-gray-200 rounded-lg px-3 py-2 focus:ring-2 focus:ring-indigo-300 focus:outline-none resize-none"
                 rows={2}
-                placeholder="e.g. furry, has stripes, is large, has wings"
+                placeholder={domain === 'medical' ? 'e.g. consolidation, pneumothorax, fibrosis' : 'e.g. furry, has stripes, is large, has wings'}
                 value={customInput}
                 onChange={(e) => setCustomInput(e.target.value)}
               />

@@ -38,7 +38,7 @@ export default function SurrogatePanel({ surrogateInfo, onFitSurrogate, hasPredi
           <svg className="w-4 h-4 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
           </svg>
-          Local Surrogate
+          This Case: Local Explanation
           {surrogateInfo && (
             <span className={`ml-2 text-[10px] px-1.5 py-0.5 rounded-full font-bold uppercase ${
               surrogateInfo.fidelity_score >= 0.8 ? 'bg-green-100 text-green-600' : 'bg-yellow-100 text-yellow-600'
@@ -57,6 +57,9 @@ export default function SurrogatePanel({ surrogateInfo, onFitSurrogate, hasPredi
 
       {expanded && (
         <div className="mt-3 space-y-3">
+          <p className="text-[11px] leading-relaxed text-gray-400">
+            Instance-specific: perturbs this input, then measures how well a simple model reproduces this case's prediction from its concepts.
+          </p>
           {/* Surrogate type selector */}
           <div>
             <p className="text-xs text-gray-500 font-semibold mb-1.5">Surrogate Model</p>

@@ -183,13 +183,26 @@ class ProbeBank:
         effective_strategy = strategy or self._probe_type
 
         # ── Custom user-defined concepts via CLIP ────────────────────
-        if effective_strategy == "custom" and custom_concepts and vision_model:
-            if not hasattr(vision_model, "score_concepts_clip"):
-                logger.warning("Model %s does not support CLIP concept scoring", type(vision_model).__name__)
-                return {c: 0.5 for c in custom_concepts}
-            descriptions = {c: f"an image showing {c}" for c in custom_concepts}
-            scorer = CLIPConceptScorer(descriptions)
-            return scorer.score(raw_input, vision_model)
+        if effective_strategy == "custom" and custom_concepts:
+            if vision_model and hasattr(vision_model, "score_concepts_clip"):
+                descriptions = {c: f"an image showing {c}" for c in custom_concepts}
+                scorer = CLIPConceptScorer(descriptions)
+                return scorer.score(raw_input, vision_model)
+
+            # Medical DenseNet has no CLIP scorer. Match requested names to
+            # existing trained probes instead of presenting unsupported
+            # zero-shot scores as medical evidence.
+            normalized = {name.lower().replace("_", " "): name
+                          for name in self._probes}
+            results = {}
+            for requested in custom_concepts:
+                key = requested.strip().lower().replace("_", " ")
+                matched = normalized.get(key)
+                if matched is None:
+                    matched = next((name for alias, name in normalized.items()
+                                    if key in alias or alias in key), None)
+                results[requested] = round(self._probes[matched].predict(features), 4) if matched else 0.5
+            return results
 
         # ── PCA auto-discovery ───────────────────────────────────────
         if effective_strategy == "pca":

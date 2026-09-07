@@ -44,7 +44,7 @@ export default function ModelTrustPanel({ domain }) {
           <svg className="w-4 h-4 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
-          Model Trust
+          Model & Concept Reliability
           {typeof head.test_accuracy === 'number' && (
             <span className="ml-2 text-[10px] px-1.5 py-0.5 rounded-full font-bold uppercase bg-emerald-100 text-emerald-700">
               acc {(head.test_accuracy * 100).toFixed(0)}%
@@ -61,6 +61,9 @@ export default function ModelTrustPanel({ domain }) {
 
       {expanded && (
         <div className="mt-3 space-y-4">
+          <p className="text-[11px] leading-relaxed text-gray-400">
+            Dataset-level evidence: held-out test performance for the task model and concept probes, plus how faithfully concepts reproduce the model overall.
+          </p>
           {/* Dataset provenance */}
           <div className="text-[11px] text-gray-400">
             {metrics.dataset} · {metrics.n_train} train / {metrics.n_val} val / {metrics.n_test} test

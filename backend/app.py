@@ -368,10 +368,10 @@ def concept_strategies():
          "description": "Concept Bottleneck Model with domain-expert defined concepts and trained linear probes"},
     ]
 
-    if is_clip_capable:
+    if is_clip_capable or domain == "medical":
         strategies.append(
             {"id": "custom", "name": "Custom Concepts",
-             "description": "Define your own concepts — scored via CLIP similarity"},
+             "description": "Choose concepts to inspect; medical terms use trained probes, vision terms use CLIP"},
         )
 
     if input_type == "image":

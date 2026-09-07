@@ -14,6 +14,10 @@ Before starting
 5. In the concept strategy selector, use CBM (Trained Probes).
 6. Click Load sample image once. Keep the three sample thumbnails visible.
 
+Panel distinction:
+"Model & Concept Reliability" is dataset-level evidence from held-out test
+data. "This Case: Local Explanation" is instance-specific: it perturbs the
+current X-ray and fits a small local model to approximate this one decision.
 Opening (30 seconds)
 --------------------
 Say:
