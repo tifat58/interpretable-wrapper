@@ -1,0 +1,193 @@
+CONCEPTLENS MEDICAL DEMO
+Guided walkthrough script: four core moments
+
+Audience: research / ML / medical-imaging audience
+Target duration: 8-10 minutes
+Branch: dev
+
+Before starting
+---------------
+1. Run ./start.sh and open http://localhost:5173.
+2. Keep the medical domain selected.
+3. Open Domain Settings and confirm Medical is enabled.
+4. Expand Model Trust so the evaluation numbers are visible.
+5. In the concept strategy selector, use CBM (Trained Probes).
+6. Click Load sample image once. Keep the three sample thumbnails visible.
+
+Opening (30 seconds)
+--------------------
+Say:
+"This is ConceptLens, a post-hoc interpretable wrapper for a chest X-ray
+classifier. The goal is not only to show the predicted class, but to expose
+an interpretable concept layer, spatial evidence, and controlled
+counterfactuals. I will show four things: prediction, concept evidence,
+spatial attribution, and a what-if intervention."
+
+Important framing:
+"This is a research demo, not a clinical diagnostic tool. The concept
+supervision is weak/model-derived rather than radiologist-annotated. The
+metrics shown in Model Trust are held-out evaluation results, so they tell us
+how reliable the model and concept probes are, not whether this is clinically
+validated."
+
+1. Compare three canonical cases (2 minutes)
+---------------------------------------------
+Action:
+1. Click the COVID-19 thumbnail.
+2. Click Predict.
+3. Point to the prediction, confidence, and concept bars.
+4. Click the Non-COVID thumbnail and Predict.
+5. Click the Normal thumbnail and Predict.
+
+Say for COVID-19:
+"The model predicts COVID-19 with its calibrated confidence. The concept
+fingerprint is more informative than the class name alone: bilateral
+involvement, lung opacity, consolidation, and ground-glass opacity are the
+main evidence signals in this case."
+
+Say for Non-COVID:
+"The important comparison is not just that this is abnormal. The concept
+profile changes. Concepts such as effusion, edema, cardiomegaly, or
+atelectasis can provide a different explanation from the COVID-19 pattern."
+
+Say for Normal:
+"The normal case should show low evidence for most pathology concepts and a
+stronger clear-lung signal. This lets us inspect whether the system's
+explanation changes coherently with the input rather than repeating a generic
+text template."
+
+Significance:
+"This is the first interpretability benefit: two images can receive related
+high-level labels but for different concept reasons, and the user can inspect
+those reasons directly."
+
+Presenter note:
+Do not claim that a concept score is a radiologist finding. Say 'the model's
+concept score' or 'model-derived evidence'.
+
+2. Show model and explanation reliability (1 minute)
+-----------------------------------------------------
+Action:
+1. Expand Model Trust.
+2. Point to Task Head: held-out test accuracy, macro-AUC, and calibrated ECE.
+3. Point to per-class AUC.
+4. Point to Concept Probe Reliability.
+5. Point to Concept Surrogate Fidelity.
+
+Say:
+"The trust panel separates three different questions. First, how well does
+the task head classify held-out images? Second, how well does each concept
+probe identify its concept? Third, how faithfully can the concept vector
+reproduce the black-box prediction?"
+
+Point out the current medical values:
+- Task head test accuracy: about 81%.
+- Macro-AUC: about 0.94.
+- Calibrated ECE: about 0.02.
+- Concept probe test AUC: approximately 0.87-0.98 after the expanded bank.
+- Concept surrogate test fidelity: about 79%.
+
+Say:
+"Fidelity is not classification accuracy. It is agreement between the
+concept-only surrogate and the original black-box head on held-out images.
+A fidelity of about 79% means the concept explanation captures a substantial
+part of the model behavior, but not all of it. That limitation is visible
+instead of being hidden."
+
+Significance:
+"This prevents explanation overclaiming. A good-looking heatmap is not enough;
+we also show whether the concept layer is predictive and whether it faithfully
+tracks the underlying model."
+
+3. Show concept-specific spatial evidence (2 minutes)
+-------------------------------------------------------
+Action:
+1. Return to the COVID-19 sample and click Predict if needed.
+2. Click the Ground Glass Opacity concept's attribution button.
+3. Wait for the heatmap and overlay.
+4. Compare the original image, heatmap, and overlay.
+5. Click a second concept such as Cardiomegaly or Pleural Effusion.
+
+Say:
+"This is not one generic saliency map. The attribution target is the selected
+concept. For Ground Glass Opacity, the probe coefficients weight the DenseNet
+feature maps directly, producing probe-grounded spatial evidence."
+
+Then say:
+"When I change the target concept, the evidence map changes. That is the key
+ distinction from showing one generic heatmap and attaching different labels
+afterwards."
+
+Significance:
+"The interface connects a human concept to image regions: what concept was
+used, where the model found supporting evidence, and how strong the probe is.
+This makes the explanation inspectable rather than purely narrative."
+
+Careful wording:
+Use 'the model attends to regions consistent with this concept'. Do not say
+that the heatmap proves a lesion is present or that it localizes disease with
+clinical accuracy. There is no radiologist localization ground truth in this
+demo.
+
+4. Demonstrate a controlled counterfactual (2-3 minutes)
+----------------------------------------------------------
+Action:
+1. Keep the COVID-19 sample selected.
+2. Run Predict and click Reset Concepts if the sliders were changed.
+3. In the concept panel, lower Ground Glass Opacity and Bilateral Involvement.
+4. Click Apply Changes.
+5. Optionally restore the concepts and instead lower Pleural Effusion or
+   Cardiomegaly to show that different interventions have different effects.
+
+Say before changing sliders:
+"This is an intervention on the explanation layer, not an edited medical
+image. I am asking: if the concept evidence changed, how would the learned
+surrogate's prediction change?"
+
+Say after applying:
+"The prediction and confidence change because the concept vector has changed.
+The delta panel shows exactly which concepts were modified. This gives us a
+counterfactual explanation: which evidence would need to be weaker or
+stronger for the model's decision to change?"
+
+Significance:
+"Counterfactuals turn explanation into an interactive hypothesis test. They
+are useful for debugging and understanding model behavior, but they do not
+mean we can safely remove or add pathology in a real patient image."
+
+If the label does not flip:
+"The model did not cross its decision boundary under this intervention. That
+is still informative: the selected concepts were not sufficient to change
+the decision at this confidence level."
+
+Closing (30 seconds)
+---------------------
+Say:
+"The demo has shown four layers: the prediction, the concept fingerprint,
+concept-specific spatial attribution, and an explicit counterfactual. The
+main significance is that the system exposes both evidence and limitations:
+we can quantify task performance, concept reliability, and surrogate fidelity
+instead of presenting an explanation with no reliability signal."
+
+End with:
+"The next validation step is clinical annotation and external evaluation. The
+current prototype uses weak/model-derived concept labels and should support
+research inspection, not clinical decision-making."
+
+Fallback plan if a model is slow
+---------------------------------
+- Use the preloaded COVID-19 sample first.
+- Keep the Model Trust panel collapsed until after the first prediction.
+- Do not switch models during the presentation.
+- If a heatmap request is slow, narrate the target concept and wait; do not
+  infer a result from the class prediction alone.
+- If the live model fails, show the Trust panel and metrics report, then
+  explain that the demo separates offline evaluation from live inference.
+
+One-slide takeaway
+-------------------
+Prediction: What class did the model choose?
+Concepts: What human-interpretable evidence supports it?
+Attribution: Where in the image did that concept evidence arise?
+Counterfactual: What evidence would need to change the decision?
+Trust: How reliable and faithful is the explanation?
