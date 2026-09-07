@@ -20,6 +20,8 @@ export default function InputPanel({ domain, inputType, onPredict, lastData, onE
   const [loading, setLoading] = useState(false)
   const [dragOver, setDragOver] = useState(false)
   const fileInputRef = useRef(null)
+  const [gallery, setGallery] = useState([])
+  const [selectedSample, setSelectedSample] = useState(null)
 
   // Input editing state
   const [editMode, setEditMode] = useState(false)
@@ -38,15 +40,21 @@ export default function InputPanel({ domain, inputType, onPredict, lastData, onE
     const { samples, type } = await res.json()
     if (!samples?.length) return
     if (type === 'text') {
+      setGallery([])
       setText(samples[0])
     } else if (type === 'image') {
-      const item = samples[0]
-      const dataUri = typeof item === 'string' ? item : (item.data || item.url)
-      setPreviewUrl(dataUri)
-      if (dataUri && dataUri.includes(',')) {
-        const b64 = dataUri.split(',')[1]
-        setImageFile({ _b64: b64 })
-      }
+      setGallery(samples)
+      selectSample(samples[0])
+    }
+  }
+
+  const selectSample = (item) => {
+    const dataUri = typeof item === 'string' ? item : (item.data || item.url)
+    setSelectedSample(item.filename || dataUri)
+    setPreviewUrl(dataUri)
+    if (dataUri && dataUri.includes(',')) {
+      const b64 = dataUri.split(',')[1]
+      setImageFile({ _b64: b64 })
     }
   }
 
@@ -289,6 +297,28 @@ export default function InputPanel({ domain, inputType, onPredict, lastData, onE
             </svg>
             Load sample image
           </button>
+          {gallery.length > 1 && (
+            <div className="flex gap-2 flex-wrap">
+              {gallery.map((item) => {
+                const dataUri = typeof item === 'string' ? item : (item.data || item.url)
+                const label = (item.filename || '').replace(/\.[^.]+$/, '').replace(/[_-]/g, ' ')
+                const isActive = (item.filename || dataUri) === selectedSample
+                return (
+                  <button
+                    key={item.filename || dataUri}
+                    onClick={() => selectSample(item)}
+                    className={`flex flex-col items-center gap-1 p-1 rounded-lg border-2 transition ${
+                      isActive ? 'border-indigo-500 bg-indigo-50' : 'border-transparent hover:border-gray-200'
+                    }`}
+                    title={label}
+                  >
+                    <img src={dataUri} alt={label} className="w-14 h-14 object-cover rounded-md" />
+                    <span className="text-[10px] text-gray-500 capitalize max-w-[60px] truncate">{label}</span>
+                  </button>
+                )
+              })}
+            </div>
+          )}
         </div>
       )}
 

@@ -9,6 +9,7 @@ import ModelSelector from './components/ModelSelector'
 import ConceptStrategySelector from './components/ConceptStrategySelector'
 import SurrogatePanel from './components/SurrogatePanel'
 import EditResultPanel from './components/EditResultPanel'
+import ModelTrustPanel from './components/ModelTrustPanel'
 
 async function api(endpoint, body) {
   const res = await fetch(endpoint, {
@@ -347,6 +348,7 @@ export default function App() {
             onFitSurrogate={handleFitSurrogate}
             hasPrediction={!!prediction}
           />
+          <ModelTrustPanel domain={domain} />
         </aside>
 
         {/* ─── CENTER (prediction + concepts) ──────────── */}

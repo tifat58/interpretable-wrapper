@@ -424,6 +424,20 @@ def local_surrogate():
     return jsonify(result)
 
 
+@app.route("/domains/<domain>/metrics", methods=["GET"])
+def domain_metrics(domain):
+    """Return offline evaluation metrics (task head, probes, surrogate) for
+    a domain, if the domain's training script has produced a report."""
+    import json
+    from config import PROBE_DATA_DIR
+    path = os.path.join(PROBE_DATA_DIR, domain, "metrics.json")
+    if not os.path.isfile(path):
+        return jsonify({"available": False})
+    with open(path) as f:
+        metrics = json.load(f)
+    return jsonify({"available": True, **metrics})
+
+
 @app.route("/samples", methods=["GET"])
 def samples():
     """Return sample data for a domain (default: toxicity)."""
