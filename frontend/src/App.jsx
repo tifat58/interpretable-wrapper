@@ -172,7 +172,8 @@ export default function App() {
 
   // ── Domain toggle ──────────────────────────────────────
   const handleDomainToggle = useCallback(async (domainName, enabled) => {
-    await api('/domains/toggle', { domain: domainName, enabled })
+    const toggleResult = await api('/domains/toggle', { domain: domainName, enabled })
+    if (toggleResult.error) return
     const [enabledRes, allRes] = await Promise.all([
       fetch('/domains').then((r) => r.json()),
       fetch('/domains/all').then((r) => r.json()),
@@ -180,6 +181,9 @@ export default function App() {
     setDomains(enabledRes.domains)
     setAllDomains(allRes.domains)
     if (!enabled && domainName === domain && enabledRes.domains.length > 0) {
+      handleDomainChange(enabledRes.domains[0].name)
+    }
+    if (enabled && !domain && enabledRes.domains.length > 0) {
       handleDomainChange(enabledRes.domains[0].name)
     }
   }, [domain])
@@ -252,7 +256,7 @@ export default function App() {
             <h1 className="text-lg font-bold tracking-tight">ConceptLens</h1>
           </div>
           {/* Domain pills + settings */}
-          {domains.length > 0 && (
+          {(
             <div className="flex gap-1.5 items-center">
               {domains.map((d) => (
                 <button

@@ -34,6 +34,8 @@ def _load_enabled_domains() -> list[str]:
             # (e.g. a domain removed from DOMAIN_CONFIG after the settings
             # file was written) so the toggle UI never gets stuck disabled.
             valid = [d for d in domains if d in DOMAIN_CONFIG]
+            if not valid:
+                valid = list(_DEFAULT_ENABLED_DOMAINS)
             if valid != domains:
                 _save_enabled_domains(valid)
             return valid
@@ -53,6 +55,8 @@ def set_domain_enabled(domain: str, enabled: bool) -> list[str]:
     """Enable or disable a domain at runtime and persist the change."""
     if domain not in DOMAIN_CONFIG:
         raise ValueError(f"Unknown domain: {domain!r}")
+    if not enabled and domain in ENABLED_DOMAINS and len(ENABLED_DOMAINS) == 1:
+        raise ValueError("At least one domain must remain enabled")
     if enabled and domain not in ENABLED_DOMAINS:
         ENABLED_DOMAINS.append(domain)
     elif not enabled and domain in ENABLED_DOMAINS:
